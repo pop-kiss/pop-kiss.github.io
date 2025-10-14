@@ -105,6 +105,23 @@
             margin-left: 10px;
         }
 
+        .download-counter {
+            display: inline-block;
+            background: #1a1a1a;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.3);
+            border: none;
+        }
+
+        .download-counter strong {
+            font-size: 1em;
+            color: rgba(255, 105, 180, 0.5);
+            font-weight: normal;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -490,7 +507,7 @@
         <div class="cta-section">
             <h2>今すぐ使ってみる / Try It Now</h2>
             <p>無料で使える映像送り返しツール / Free video return tool</p>
-            <a href="https://github.com/pop-kiss/pop-kiss.github.io/releases/download/RET-KUN/RET-KUN_B2.zip" class="btn">ダウンロード / Download</a>
+            <a href="https://github.com/pop-kiss/pop-kiss.github.io/releases/download/RET-KUN/RET-KUN.zip" class="btn">ダウンロード / Download</a>
         </div>
 
         <!-- 技術情報 -->
@@ -557,6 +574,29 @@
             ⚡ Low latency prioritized (lip-sync not guaranteed)
         </p>
     </footer>
+
+    <div class="download-counter" style="text-align: center; padding: 15px 20px; background: #0a0a0a;">
+        Total downloads: <strong><span id="downloadCount">0</span></strong>
+    </div>
+
+    <script>
+        // ダウンロードカウンター
+        function countDownload(event) {
+            // カウント処理(ダウンロードは継続)
+            let count = parseInt(localStorage.getItem('retkunDownloadCount') || '0');
+            count++;
+            localStorage.setItem('retkunDownloadCount', count);
+            document.getElementById('downloadCount').textContent = count;
+            
+            // ダウンロードは通常通り実行される(event.preventDefault()しない)
+            return true;
+        }
+        
+        // ページ読み込み時にカウントを表示
+        window.addEventListener('DOMContentLoaded', function() {
+            let count = parseInt(localStorage.getItem('retkunDownloadCount') || '0');
+            document.getElementById('downloadCount').textContent = count;
+        });
+    </script>
 </body>
 </html>
-
