@@ -503,11 +503,63 @@
             </div>
         </div>
 
+        <!-- 帯域使用量セクション -->
+        <div class="section">
+            <h2>何台くらい同時に見られる? / How Many Devices?</h2>
+            <p style="text-align: center; color: rgba(255, 255, 255, 0.6); margin-bottom: 30px; font-size: 1.1em;">
+                設定次第で、こんな感じです / Depending on your settings
+            </p>
+            
+            <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); border-radius: 20px; overflow-x: auto; border: 2px solid #333; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: linear-gradient(135deg, #ff69b4, #ff1493);">
+                            <th style="color: white; padding: 15px; text-align: center; font-size: 1em; font-weight: bold;">設定 / Settings</th>
+                            <th style="color: white; padding: 15px; text-align: center; font-size: 1em; font-weight: bold;">1台あたり / Per Device</th>
+                            <th style="color: white; padding: 15px; text-align: center; font-size: 1em; font-weight: bold;">家庭用WiFi / Home WiFi</th>
+                            <th style="color: white; padding: 15px; text-align: center; font-size: 1em; font-weight: bold;">業務用WiFi / Business WiFi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="transition: background 0.3s;">
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ff69b4; font-weight: bold;">1920x1080 30fps<br>4000kbps</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">約4.1 Mbps</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">3-5台</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">8-15台</td>
+                        </tr>
+                        <tr style="transition: background 0.3s;">
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ff69b4; font-weight: bold;">1280x720 30fps<br>2000kbps</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">約2.1 Mbps</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">5-10台</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">15-30台</td>
+                        </tr>
+                        <tr style="transition: background 0.3s;">
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ff69b4; font-weight: bold;">854x480 30fps<br>1000kbps</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">約1.1 Mbps</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">8-15台</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #333; color: #ccc;">30-50台</td>
+                        </tr>
+                        <tr style="transition: background 0.3s;">
+                            <td style="padding: 15px; text-align: center; color: #ff69b4; font-weight: bold;">640x360 30fps<br>500kbps</td>
+                            <td style="padding: 15px; text-align: center; color: #ccc;">約0.6 Mbps</td>
+                            <td style="padding: 15px; text-align: center; color: #ccc;">10-20台</td>
+                            <td style="padding: 15px; text-align: center; color: #ccc;">50-80台</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="text-align: center; color: rgba(255, 255, 255, 0.5); margin-top: 20px; font-size: 0.95em;">
+                ※ 音声込み　※ 環境によって変わります<br>
+                <span style="font-style: italic;">※ Including audio ※ Varies by environment</span>
+            </p>
+        </div>
+
         <!-- ダウンロードCTA -->
         <div class="cta-section">
             <h2>今すぐ使ってみる / Try It Now</h2>
             <p>無料で使える映像送り返しツール / Free video return tool</p>
-            <a href="https://github.com/pop-kiss/pop-kiss.github.io/releases/download/RET-KUN/RET-KUN_B2.zip" class="btn">ダウンロード / Download</a>
+            <a href="https://github.com/pop-kiss/pop-kiss.github.io/releases/download/RET-KUN/RET-KUN_B2.zip" class="btn" id="downloadBtn" onclick="countDownload(event)">ダウンロード / Download</a>
         </div>
 
         <!-- 技術情報 -->
@@ -600,4 +652,3 @@
     </script>
 </body>
 </html>
-
