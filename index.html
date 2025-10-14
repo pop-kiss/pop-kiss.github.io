@@ -93,6 +93,18 @@
             margin-top: 15px;
         }
 
+        .hero .ai-badge {
+            display: inline-block;
+            background: rgba(255, 193, 7, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            color: #ffc107;
+            font-size: 0.9em;
+            border: 1px solid #ffc107;
+            margin-top: 15px;
+            margin-left: 10px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -113,120 +125,151 @@
             text-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
         }
 
-        .features {
+        .quick-start {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #ff69b4;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .quick-start h3 {
+            color: #ff69b4;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .step {
+            background: #0a0a0a;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #ff69b4;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateX(10px);
+            border-left-color: #a78bfa;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+
+        .step-content {
+            display: inline-block;
+            vertical-align: middle;
+            width: calc(100% - 60px);
+        }
+
+        .step-title {
+            color: #ff69b4;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .notice-box {
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .notice-box h4 {
+            color: #ffc107;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .notice-box h4::before {
+            content: '⚠️';
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .notice-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .notice-box li {
+            color: #e0e0e0;
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .notice-box li::before {
+            content: '•';
+            color: #ffc107;
+            font-size: 1.5em;
+            position: absolute;
+            left: 10px;
+            top: 5px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-top: 40px;
         }
 
-        .feature-card {
+        .feature-item {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            padding: 35px;
-            border-radius: 20px;
+            padding: 30px;
+            border-radius: 15px;
             border: 2px solid #333;
             transition: all 0.3s ease;
-            color: #fff;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
         }
 
-        .feature-card:hover {
-            transform: translateY(-8px) scale(1.02);
+        .feature-item:hover {
+            transform: translateY(-5px);
             border-color: #ff69b4;
-            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
         }
 
-        .feature-card .icon {
-            font-size: 3.5em;
+        .feature-icon {
+            font-size: 3em;
             margin-bottom: 15px;
         }
 
-        .feature-card h3 {
+        .feature-item h4 {
             color: #ff69b4;
-            font-size: 1.6em;
-            margin-bottom: 15px;
-            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 12px;
         }
 
-        .feature-card p {
+        .feature-item p {
             color: #ccc;
-            line-height: 1.8;
-        }
-
-        .specs-table {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid #333;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .specs-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .specs-table th {
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
-            color: white;
-            padding: 20px;
-            text-align: left;
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-
-        .specs-table td {
-            padding: 20px;
-            border-bottom: 1px solid #333;
-            color: #ccc;
-        }
-
-        .specs-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .specs-table tr:hover {
-            background: rgba(255, 105, 180, 0.1);
-        }
-
-        .specs-table td:first-child {
-            color: #ff69b4;
-            font-weight: 700;
-            width: 40%;
-        }
-
-        .bandwidth-table {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-radius: 20px;
-            overflow-x: auto;
-            border: 2px solid #333;
-            margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .bandwidth-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .bandwidth-table th {
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 1em;
-            font-weight: bold;
-        }
-
-        .bandwidth-table td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #333;
-            color: #ccc;
-        }
-
-        .bandwidth-table tr:hover {
-            background: rgba(255, 105, 180, 0.1);
+            line-height: 1.6;
         }
 
         .cta-section {
@@ -236,19 +279,12 @@
             border-radius: 25px;
             margin: 60px 0;
             box-shadow: 0 15px 50px rgba(255, 105, 180, 0.4);
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
         }
 
         .cta-section h2 {
             color: white;
             font-size: 2.5em;
             margin-bottom: 15px;
-            font-weight: 700;
             text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
 
@@ -277,21 +313,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
-        .screenshot {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 15px;
-            border: 2px solid #2a2a2a;
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .screenshot img {
-            max-width: 100%;
-            border-radius: 10px;
-            border: 2px solid #3a3a3a;
-        }
-
         footer {
             background: #1a1a1a;
             padding: 40px 20px;
@@ -305,39 +326,11 @@
             height: 80px;
             margin: 0 auto 15px;
             opacity: 0.9;
-            transition: opacity 0.3s ease;
             filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.4));
-        }
-
-        footer .logo-footer:hover {
-            opacity: 1;
-            filter: drop-shadow(0 0 25px rgba(255, 105, 180, 0.6));
         }
 
         footer p {
             color: #ccc;
-        }
-
-        .highlight {
-            color: #a78bfa;
-            font-weight: bold;
-        }
-
-        .download-counter {
-            display: inline-block;
-            background: #1a1a1a;
-            padding: 5px 10px;
-            border-radius: 5px;
-            margin-top: 5px;
-            font-size: 0.75em;
-            color: rgba(255, 255, 255, 0.3);
-            border: none;
-        }
-
-        .download-counter strong {
-            font-size: 1em;
-            color: rgba(255, 105, 180, 0.5);
-            font-weight: normal;
         }
 
         @media (max-width: 768px) {
@@ -346,11 +339,13 @@
             }
             
             .section h2 {
-                font-size: 2em;
+                font-size: 1.8em;
             }
-            
-            .features {
-                grid-template-columns: 1fr;
+
+            .step-content {
+                display: block;
+                width: 100%;
+                margin-top: 10px;
             }
         }
     </style>
@@ -365,249 +360,190 @@
             Return video to everyone's phone!
         </p>
         <div class="version">β Version</div>
+        <div class="ai-badge">🤖 100% AI Generated</div>
     </div>
 
     <div class="container">
-        <!-- 概要セクション -->
+        <!-- クイックスタート -->
         <div class="section">
-            <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 40px; border-radius: 20px; border: 2px solid #333; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
-                <h2 style="font-size: 1.8em; color: #ff69b4; margin-bottom: 20px; font-weight: bold;">どんなツール?</h2>
-                <p style="font-size: 1.2em; line-height: 1.8; color: #fff; margin-bottom: 15px;">
-                    <strong style="color: #ff69b4;">スイッチャーの映像を、みんなのスマホやタブレットに送れます</strong>
-                </p>
-                <p style="font-size: 1.1em; line-height: 1.8; color: #ccc; margin-bottom: 25px;">
-                    スイッチャーから出た映像を、現場スタッフのスマホに<strong style="color: #ff69b4;">低遅延(0.5~2秒くらい)</strong>で配信できちゃいます。<br>
-                    <strong style="color: #ff69b4;">赤枠・緑枠のTally表示</strong>もあるので、今どのカメラが映ってるかもバッチリわかる!
-                </p>
-                <div style="border-top: 2px solid #333; padding-top: 20px; margin-top: 20px;">
-                    <p style="font-size: 1em; line-height: 1.7; color: #999; font-style: italic;">
-                        <strong style="color: #ff69b4;">What is this?</strong><br>
-                        Return video from your switcher to everyone's phones with super low latency!
-                        With Program/Preview tally, so easy to use 👍
-                    </p>
+            <h2>使い方 / How to Use</h2>
+            <div class="quick-start">
+                <h3>📱 簡単3ステップで始められます / Easy 3 Steps to Get Started</h3>
+                
+                <div class="steps">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <div class="step-title">RET-KUN.exeを起動 / Launch RET-KUN.exe</div>
+                            <div class="step-desc">
+                                ダウンロードしたフォルダ内の<strong style="color: #ff69b4;">RET-KUN.exe</strong>をダブルクリックで起動してください。Windowsが警告を出す場合は「詳細情報」→「実行」を選択してください。<br>
+                                <span style="font-size: 0.95em; color: #999; font-style: italic; display: block; margin-top: 8px;">
+                                    Double-click <strong style="color: #ff69b4;">RET-KUN.exe</strong> in the downloaded folder. If Windows shows a warning, click "More info" → "Run anyway".
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <div class="step-title">Setting Pageで機材を設定 / Configure Devices on Setting Page</div>
+                            <div class="step-desc">
+                                起動後、自動で開く<strong style="color: #ff69b4;">Setting Page</strong>で、使用する<strong style="color: #ff69b4;">ビデオキャプチャデバイス</strong>と<strong style="color: #ff69b4;">オーディオデバイス</strong>を選択。ATEMを使っている場合はIPアドレスを入力し、「Save Settings」をクリックしてください。<br>
+                                <span style="font-size: 0.95em; color: #999; font-style: italic; display: block; margin-top: 8px;">
+                                    On the <strong style="color: #ff69b4;">Setting Page</strong> that opens automatically, select your <strong style="color: #ff69b4;">video capture device</strong> and <strong style="color: #ff69b4;">audio device</strong>. If using ATEM, enter the IP address and click "Save Settings".
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <div class="step-title">「Start Streaming」で配信開始 / Start Streaming</div>
+                            <div class="step-desc">
+                                Setting Page上部の<strong style="color: #ff69b4;">「Start Streaming」</strong>ボタンをクリックして配信を開始。その後、表示される<strong style="color: #ff69b4;">QRコード</strong>をスマホで読み取るだけでブラウザに映像が表示されます。アプリのインストールは不要です。<br>
+                                <span style="font-size: 0.95em; color: #999; font-style: italic; display: block; margin-top: 8px;">
+                                    Click the <strong style="color: #ff69b4;">"Start Streaming"</strong> button on the Setting Page. Then scan the <strong style="color: #ff69b4;">QR code</strong> with your phone to view the video in your browser. No app installation needed.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <!-- 重要な注意事項 -->
+            <div class="notice-box">
+                <h4>重要な特徴・注意事項 / Important Features & Notes</h4>
+                <ul>
+                    <li><strong>完全AI製作 / 100% AI Generated:</strong> このツールは100%AIによって設計・実装されています / This tool is entirely designed and implemented by AI</li>
+                    <li><strong>低遅延優先 / Low Latency Priority:</strong> 映像の遅延を最小化(0.5~2秒)することを優先し、リップシンク(音声と映像の同期)は犠牲にしています / Prioritizes minimal latency (0.5-2 sec) over lip-sync accuracy</li>
+                    <li><strong>無料ツール / Free Tool:</strong> このツールは完全無料で提供されます。商用利用も可能です / Completely free to use, including commercial use</li>
+                    <li><strong>サポートについて / About Support:</strong> サポートは作者のやる気次第です。期待しすぎないでください / Support depends on the creator's motivation. Don't expect too much</li>
+                    <li><strong>ベータ版 / Beta Version:</strong> まだテスト段階のため、予期しない動作が発生する可能性があります / Still in testing phase, unexpected behavior may occur</li>
+                    <li><strong>推奨環境 / Recommended Environment:</strong> 有線LAN接続を強く推奨します。WiFiの場合は5GHz帯を使用してください / Wired LAN strongly recommended. Use 5GHz band for WiFi</li>
+                </ul>
             </div>
         </div>
 
         <!-- 特徴セクション -->
         <div class="section">
-            <h2>できること</h2>
-            <div class="features">
-                <div class="feature-card">
-                    <div class="icon">📹</div>
-                    <h3>映像を送り返せる</h3>
-                    <p>スイッチャーから出た映像を、現場のみんなのスマホに配信。モニターを持ち歩かなくてOK!</p>
-                    <p style="font-size: 0.85em; color: #999; margin-top: 10px; font-style: italic;">Return video from switcher to everyone's phones</p>
+            <h2>主な機能 / Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h4>超低遅延 / Ultra Low Latency</h4>
+                    <p>0.5~2秒の低遅延を実現。リアルタイムに近い映像確認が可能です。音声同期よりも速度を優先しています。</p>
+                    <p style="font-size: 0.9em; color: #999; margin-top: 8px; font-style: italic;">
+                        Achieves 0.5-2 sec latency. Near real-time video monitoring. Speed prioritized over audio sync.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">🔴</div>
-                    <h3>Tally表示対応</h3>
-                    <p>ATEM系スイッチャーと連携して、Program(赤枠)とPreview(緑枠)をリアルタイム表示。CAM 1~8に対応してます。</p>
-                    <p style="font-size: 0.85em; color: #999; margin-top: 10px; font-style: italic;">Real-time tally with ATEM (CAM 1-8)</p>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🔴</div>
+                    <h4>Tally表示 / Tally Display</h4>
+                    <p>ATEM/TSL 5.0対応。Program(赤枠)とPreview(緑枠)をリアルタイム表示。CAM 1~8に対応しています。</p>
+                    <p style="font-size: 0.9em; color: #999; margin-top: 8px; font-style: italic;">
+                        ATEM/TSL 5.0 compatible. Real-time Program (red) and Preview (green) display. Supports CAM 1-8.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">📱</div>
-                    <h3>スマホでOK</h3>
-                    <p>手持ちのスマホやタブレットで見られます。アプリのインストールも不要、QRコードでサクッとアクセス。</p>
-                    <p style="font-size: 0.85em; color: #999; margin-top: 10px; font-style: italic;">Works on any smartphone, no app needed</p>
+
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <h4>アプリ不要 / No App Required</h4>
+                    <p>スマホやタブレットのブラウザだけで視聴可能。特別なアプリのインストールは一切不要です。</p>
+                    <p style="font-size: 0.9em; color: #999; margin-top: 8px; font-style: italic;">
+                        Works on phone/tablet browsers. No special app installation needed.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">⚡</div>
-                    <h3>遅延少なめ</h3>
-                    <p>遅延は0.5~2秒くらい。リアルタイムで映像チェックできるので、現場確認もスムーズ。</p>
-                    <p style="font-size: 0.85em; color: #999; margin-top: 10px; font-style: italic;">Low latency (0.5-2 sec)</p>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <h4>カスタマイズ / Customizable</h4>
+                    <p>画質・解像度・フレームレート・Tally表示サイズなど、用途に合わせて細かく調整できます。</p>
+                    <p style="font-size: 0.9em; color: #999; margin-top: 8px; font-style: italic;">
+                        Adjust quality, resolution, frame rate, tally size, and more to your needs.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">🎨</div>
-                    <h3>邪魔にならないTally</h3>
-                    <p>映像の邪魔にならないように、枠だけのシンプル表示。Tallyいらない時は「None」も選べます。</p>
-                    <p style="font-size: 0.85em; color: #999; margin-top: 10px; font-style: italic;">Frame-only tally, "None" option available</p>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🌐</div>
+                    <h4>複数同時接続 / Multiple Connections</h4>
+                    <p>設定次第で3~80台のデバイスから同時視聴可能。現場スタッフ全員で映像確認できます。</p>
+                    <p style="font-size: 0.9em; color: #999; margin-top: 8px; font-style: italic;">
+                        Support 3-80 simultaneous devices depending on settings. Whole crew can monitor.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">⚙️</div>
-                    <h3>設定カンタン</h3>
-                    <p>PCとキャプチャーデバイスがあればすぐ使えます。画質や解像度も、用途に合わせて調整できます。</p>
-                    <p style="font-size: 0.85em; color: #999; margin-top: 10px; font-style: italic;">Easy setup, adjustable quality</p>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <h4>AI製作 / AI Generated</h4>
+                    <p>このツールは完全にAIによって設計・実装されました。人間が書いたコードは一切含まれていません。</p>
+                    <p style="font-size: 0.9em; color: #999; margin-top: 8px; font-style: italic;">
+                        Entirely designed and implemented by AI. No human-written code.
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- 帯域使用量セクション -->
-        <div class="section">
-            <h2>何台くらい同時に見られる?</h2>
-            <p style="text-align: center; color: rgba(255, 255, 255, 0.6); margin-bottom: 30px; font-size: 1.1em;">
-                設定次第で、こんな感じです
-            </p>
-            
-            <div class="bandwidth-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>設定</th>
-                            <th>1台あたり</th>
-                            <th>家庭用WiFi</th>
-                            <th>業務用WiFi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>1920x1080 30fps<br>4000kbps</strong></td>
-                            <td>約4.1 Mbps</td>
-                            <td>3-5台</td>
-                            <td>8-15台</td>
-                        </tr>
-                        <tr>
-                            <td><strong>1280x720 30fps<br>2000kbps</strong></td>
-                            <td>約2.1 Mbps</td>
-                            <td>5-10台</td>
-                            <td>15-30台</td>
-                        </tr>
-                        <tr>
-                            <td><strong>854x480 30fps<br>1000kbps</strong></td>
-                            <td>約1.1 Mbps</td>
-                            <td>8-15台</td>
-                            <td>30-50台</td>
-                        </tr>
-                        <tr>
-                            <td><strong>640x360 30fps<br>500kbps</strong></td>
-                            <td>約0.6 Mbps</td>
-                            <td>10-20台</td>
-                            <td>50-80台</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <p style="text-align: center; color: rgba(255, 255, 255, 0.5); margin-top: 20px; font-size: 0.95em;">
-                ※ 音声込み　※ 環境によって変わります
-            </p>
-        </div>
-
-        <!-- 技術仕様セクション -->
-        <div class="section">
-            <h2>スペック</h2>
-            <div class="specs-table">
-                <table>
-                    <tr>
-                        <th colspan="2">システム仕様</th>
-                    </tr>
-                    <tr>
-                        <td>対応OS</td>
-                        <td>Windows 10/11 (64bit)</td>
-                    </tr>
-                    <tr>
-                        <td>推奨CPU</td>
-                        <td>Intel Core i5以上 (推奨: Core i7)</td>
-                    </tr>
-                    <tr>
-                        <td>推奨メモリ</td>
-                        <td>8GB以上 (推奨: 16GB)</td>
-                    </tr>
-                    <tr>
-                        <td>ネットワーク</td>
-                        <td>有線LAN推奨 / WiFi 5GHz帯推奨</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="specs-table" style="margin-top: 30px;">
-                <table>
-                    <tr>
-                        <th colspan="2">映像・音声</th>
-                    </tr>
-                    <tr>
-                        <td>対応解像度</td>
-                        <td>320x180 ~ 1920x1080</td>
-                    </tr>
-                    <tr>
-                        <td>対応フレームレート</td>
-                        <td>15 / 25 / 30 / 60 fps</td>
-                    </tr>
-                    <tr>
-                        <td>映像ビットレート</td>
-                        <td>500 ~ 10000 kbps</td>
-                    </tr>
-                    <tr>
-                        <td>音声ビットレート</td>
-                        <td>64 ~ 320 kbps</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="specs-table" style="margin-top: 30px;">
-                <table>
-                    <tr>
-                        <th colspan="2">Tally機能</th>
-                    </tr>
-                    <tr>
-                        <td>対応スイッチャー</td>
-                        <td>ATEM系のスイッチャー</td>
-                    </tr>
-                    <tr>
-                        <td>対応カメラ</td>
-                        <td>CAM 1 ~ CAM 8</td>
-                    </tr>
-                    <tr>
-                        <td>Tally表示</td>
-                        <td>赤枠 (Program) / 緑枠 (Preview) / None</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="specs-table" style="margin-top: 30px;">
-                <table>
-                    <tr>
-                        <th colspan="2">視聴環境</th>
-                    </tr>
-                    <tr>
-                        <td>対応ブラウザ</td>
-                        <td>Chrome 90+ / Edge 90+ / Safari 14+ / Firefox 88+</td>
-                    </tr>
-                    <tr>
-                        <td>対応デバイス</td>
-                        <td>Windows / Mac / iPhone / iPad / Android</td>
-                    </tr>
-                    <tr>
-                        <td>専用アプリ</td>
-                        <td>不要(ブラウザのみで視聴可能)</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- CTAセクション -->
+        <!-- ダウンロードCTA -->
         <div class="cta-section">
-            <h2>使ってみる</h2>
-            <p>低遅延で映像を送り返せます</p>
-            <a href="https://github.com/pop-kiss/pop-kiss.github.io/releases/download/RET-KUN/RET-KUN_B1.zip" class="btn" id="downloadBtn" onclick="countDownload(event)">ダウンロード</a>
+            <h2>今すぐ使ってみる / Try It Now</h2>
+            <p>無料で使える映像送り返しツール / Free video return tool</p>
+            <a href="https://github.com/pop-kiss/pop-kiss.github.io/releases/download/RET-KUN/RET-KUN.zip" class="btn">ダウンロード / Download</a>
         </div>
 
-        <!-- 問い合わせセクション -->
+        <!-- 技術情報 -->
         <div class="section">
-            <h2>お問い合わせ</h2>
-            <div class="specs-table">
-                <table>
-                    <tr>
-                        <th colspan="2">Contact</th>
-                    </tr>
-                    <tr>
-                        <td>作ってる人</td>
-                        <td><strong>POP KISS</strong></td>
-                    </tr>
-                    <tr>
-                        <td>ツール名</td>
-                        <td>RET-KUN</td>
-                    </tr>
-                    <tr>
-                        <td>連絡先</td>
-                        <td><a href="mailto:pop_kiss1@protonmail.com" style="color: #a78bfa; text-decoration: none;">pop_kiss1@protonmail.com</a></td>
-                    </tr>
-                    <tr>
-                        <td>サポート</td>
-                        <td>質問や要望があれば、気軽にメールください<br>
-                        <span style="font-size: 0.9em; color: #666;">Feel free to contact us!</span></td>
-                    </tr>
-                </table>
+            <h2>技術仕様 / Technical Specifications</h2>
+            <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 30px; border-radius: 15px; border: 2px solid #333;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #ff69b4; margin-bottom: 10px;">対応OS / OS</h4>
+                        <p style="color: #ccc;">Windows 10/11 (64bit)</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff69b4; margin-bottom: 10px;">対応ブラウザ / Browsers</h4>
+                        <p style="color: #ccc;">Chrome 90+, Edge 90+, Safari 14+, Firefox 88+</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff69b4; margin-bottom: 10px;">解像度 / Resolution</h4>
+                        <p style="color: #ccc;">320x180 ~ 1920x1080</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff69b4; margin-bottom: 10px;">フレームレート / Frame Rate</h4>
+                        <p style="color: #ccc;">15/25/30/60 fps</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff69b4; margin-bottom: 10px;">Tally対応 / Tally Support</h4>
+                        <p style="color: #ccc;">ATEM switchers, TSL 5.0 UMD</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff69b4; margin-bottom: 10px;">通信プロトコル / Protocol</h4>
+                        <p style="color: #ccc;">WebRTC (low latency)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- お問い合わせ -->
+        <div class="section">
+            <h2>お問い合わせ / Contact</h2>
+            <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 40px; border-radius: 15px; border: 2px solid #333; text-align: center;">
+                <p style="color: #ccc; font-size: 1.1em; margin-bottom: 20px;">
+                    質問や要望があれば、気軽にメールください<br>
+                    <span style="font-size: 0.9em; color: #999;">(ただしサポートは作者のやる気次第です)</span>
+                </p>
+                <p style="color: #999; font-size: 1em; margin-bottom: 20px; font-style: italic;">
+                    Feel free to contact us with questions or requests<br>
+                    <span style="font-size: 0.9em;">(But support depends on creator's motivation)</span>
+                </p>
+                <p style="margin: 15px 0;">
+                    <strong style="color: #ff69b4; font-size: 1.2em;">POP KISS</strong>
+                </p>
+                <a href="mailto:pop_kiss1@protonmail.com" style="color: #a78bfa; text-decoration: none; font-size: 1.1em;">
+                    pop_kiss1@protonmail.com
+                </a>
             </div>
         </div>
     </div>
@@ -616,32 +552,10 @@
         <img src="popkiss-logo.png" alt="POP KISS" class="logo-footer">
         <p><strong>RET-KUN</strong> - 映像送り返しツール</p>
         <p style="margin-top: 10px;">© 2025 POP KISS. All rights reserved.</p>
+        <p style="margin-top: 15px; font-size: 0.9em; color: #999;">
+            🤖 This tool is 100% AI generated<br>
+            ⚡ Low latency prioritized (lip-sync not guaranteed)
+        </p>
     </footer>
-
-    <div class="download-counter" style="text-align: center; padding: 15px 20px; background: #0a0a0a;">
-        Total downloads: <strong><span id="downloadCount">0</span></strong>
-    </div>
-
-    <script>
-        // ダウンロードカウンター
-        function countDownload(event) {
-            // カウント処理(ダウンロードは継続)
-            let count = parseInt(localStorage.getItem('retkunDownloadCount') || '0');
-            count++;
-            localStorage.setItem('retkunDownloadCount', count);
-            document.getElementById('downloadCount').textContent = count;
-            
-            // ダウンロードは通常通り実行される(event.preventDefault()しない)
-            return true;
-        }
-        
-        // ページ読み込み時にカウントを表示
-        window.addEventListener('DOMContentLoaded', function() {
-            let count = parseInt(localStorage.getItem('retkunDownloadCount') || '0');
-            document.getElementById('downloadCount').textContent = count;
-        });
-    </script>
 </body>
 </html>
-
-
