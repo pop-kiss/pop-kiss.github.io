@@ -15,7 +15,7 @@
  <span class="sp"></span>
  <div class="lang" role="group" aria-label="Language"><button type="button" data-l="ja">JA</button><button type="button" data-l="en">EN</button></div>
 </header>
-<nav><a href="#about">ABOUT</a><a href="#products">PRODUCTS</a><a href="#contact">CONTACT</a></nav>
+<nav><a href="#products">PRODUCTS</a><a href="#contact">CONTACT</a><a href="#about">ABOUT</a></nav>
 
 <main>
  <section>
@@ -25,29 +25,24 @@
   <p class="lead en">Software and hardware, built for broadcast and live production.</p>
  </section>
 
- <section class="sec" id="about">
-  <h2><span class="ja">自己紹介</span><span class="en">About</span> <span class="sub">ABOUT</span></h2>
-  <div class="about"><b>POPKISS</b><span class="ja">東京のビデオエンジニア</span><span class="en">Video engineer in Tokyo</span></div>
- </section>
-
  <section class="sec" id="products">
   <h2><span class="ja">製品・ツール</span><span class="en">Products</span> <span class="sub">PRODUCTS</span></h2>
   <div class="cards">
    <article class="card">
     <div class="tags"><span class="chip">HARDWARE</span><span class="chip">TALLY / GPIO</span><span class="chip dev"><span class="ja">開発中</span><span class="en">IN DEVELOPMENT</span></span></div>
     <h3>KISS-1 <small>TALLY / GPIO INTERFACE</small></h3>
-    <p class="ja">DB25 の全ピンを、入力・出力・COM・GND・5V に自由に割り当てられるタリー / GPIO インターフェイスです。ATEM や TSL 5.0 からタリーを受けて接点で出したり、接点入力を TSL 5.0 で送ったりできます。</p>
-    <p class="en">A tally / GPIO interface whose DB25 pins can each be set as input, output, COM, GND or 5 V. It takes tally from ATEM or TSL 5.0 and drives contacts, or sends contact inputs out as TSL 5.0.</p>
+    <p class="ja">DB25 の全ピンを、入力・出力・COM・GND・5V に自由に割り当てられるタリー / GPIO インターフェイスです。スイッチャーや TSL 5.0 からタリーを受けて接点で出したり、接点入力を TSL 5.0 で送ったりできます。</p>
+    <p class="en">A tally / GPIO interface whose DB25 pins can each be set as input, output, COM, GND or 5 V. It takes tally from a switcher or TSL 5.0 and drives contacts, or sends contact inputs out as TSL 5.0.</p>
     <ul class="ja">
      <li>ブラウザから設定、プリセットも保存可能</li>
-     <li>ATEM → TSL 5.0 変換</li>
+     <li>受けたタリーを TSL 5.0 で送信</li>
      <li>2台以上で、LAN 越しに接点を延長</li>
      <li>本体で動くスクリプトで、独自の動きを追加</li>
      <li>ESP32 なので、自作ファームも自由に書き込める</li>
     </ul>
     <ul class="en">
      <li>Set up from a web browser, with presets</li>
-     <li>ATEM to TSL 5.0 conversion</li>
+     <li>Sends the tally out as TSL 5.0</li>
      <li>Extend contacts over the LAN with two or more units</li>
      <li>Add your own behavior with scripts that run on the unit</li>
      <li>Runs on an ESP32 — flash your own firmware freely</li>
@@ -83,6 +78,11 @@
   <a class="mail" href="mailto:pop_kiss1@protonmail.com">pop_kiss1@protonmail.com</a>
   <p class="note ja">お問い合わせはメールでお願いします。</p>
   <p class="note en">Please get in touch by email.</p>
+ </section>
+
+ <section class="sec" id="about">
+  <h2><span class="ja">自己紹介</span><span class="en">About</span> <span class="sub">ABOUT</span></h2>
+  <div class="about"><b>POPKISS</b><span class="ja">東京のビデオエンジニア</span><span class="en">Video engineer in Tokyo</span></div>
  </section>
 </main>
 
