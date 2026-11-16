@@ -109,13 +109,16 @@
    <tr><th>Script</th><td><span class="ja">Arduino 風（setup / loop）、UDP・TCP・HTTP・OSC・TSL</span><span class="en">Arduino style (setup / loop); UDP, TCP, HTTP, OSC, TSL</span></td></tr>
    <tr><th>MCU</th><td><span class="ja">ESP32-S3（USB-C から自作ファームを自由に書き込み可能）</span><span class="en">ESP32-S3 (flash your own firmware freely over USB-C)</span></td></tr>
    <tr><th>Network</th><td><span class="ja">有線 LAN（RJ45）</span><span class="en">Wired LAN (RJ45)</span></td></tr>
-   <tr><th>Power</th><td>USB-C / DC 9–24 V</td></tr>
+   <tr><th>Power</th><td><span class="ja">DC 9–24 V（最大 36 W）。USB-C は書き込み用（+5V 出力は DC 給電のときだけ）</span><span class="en">DC 9–24 V (36 W max). USB-C is for flashing (+5 V output needs DC power)</span></td></tr>
+   <tr><th>+5V out</th><td><span class="ja">合計 最大 5 A（DC 給電時）</span><span class="en">Up to 5 A in total (with DC power)</span></td></tr>
+   <tr><th>Pin current</th><td><span class="ja">GND 出力・GND GPO・GND：約 1 A<br>GPO・COM・+5V 出力：0.3 A（PTC で保護）<br>GPI：約 3 mA</span><span class="en">GND out, GND GPO, GND: about 1 A<br>GPO, COM, +5 V out: 0.3 A (PTC protected)<br>GPI: about 3 mA</span></td></tr>
+   <tr><th>Pin voltage</th><td><span class="ja">本体の GND から見て −0.6 V〜+30 V</span><span class="en">−0.6 V to +30 V from the unit's GND</span></td></tr>
    <tr><th>Display</th><td><span class="ja">OLED（IP アドレスを常に表示）</span><span class="en">OLED (always shows the IP address)</span></td></tr>
    <tr><th>Storage</th><td><span class="ja">本体と microSD に設定を保存</span><span class="en">Settings saved on the unit and to microSD</span></td></tr>
    <tr><th>Web UI</th><td>日本語 / English / Español / 中文 / 한국어</td></tr>
   </table>
-  <p class="note ja">開発中のため、仕様は変わることがあります。</p>
-  <p class="note en">KISS-1 is still in development, so specifications may change.</p>
+  <p class="note ja">COM ピンは、つながっている GPO の電流をまとめて流すので、合計が 0.3 A を超えるときは COM を複数のピンに割り当ててください。開発中のため、仕様は変わることがあります。</p>
+  <p class="note en">A COM pin carries the current of every GPO on it, so if the total goes over 0.3 A, assign COM to more than one pin. KISS-1 is still in development, so specifications may change.</p>
  </section>
 
  <section class="sec" id="dev">

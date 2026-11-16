@@ -29,7 +29,8 @@ help, paste or attach this whole file first, then say what you want to build.
 - microSD    : SDMMC, 1-bit
 - Status LED : 1x WS2812B
 - Button     : USER (reads LOW when pressed)
-- Power      : USB-C / DC input (voltage readable by ADC). TPS54560 supply for the +5 V output
+- Power      : DC 9 to 24 V (36 W max) as standard. USB-C is for flashing. DC input voltage readable by ADC.
+               TPS54560 makes the +5 V output from the DC input (up to 5 A in total)
 - DB25       : 25 pins. Every pin has three parts:
     K     ... photoMOS relay. Connects the pin to CBUS (the common bus)
     Q     ... FET. Pulls the pin to board GND
@@ -140,7 +141,15 @@ An input lights when its pin is pulled to ISO0
    - When one pin moves from K to Q (or Q to K), open it first, wait 3 ms,
      then close the other side.
    - Switching on: bus first, then pins. Switching off: pins first, then bus.
-6) Keep the +5 V output to about 5 A in total across all pins.
+6) Current and voltage limits (per pin, continuous)
+   - GND out, GND GPO, fixed GND (through Q): about 1 A (set by the board traces)
+   - GPO, COM, +5 V out (through K): 0.3 A (photoMOS 0.4 A, series PTC hold 0.35 A; the PTC trips above that and resets when cool)
+   - GPI (input): about 3 mA (sense current from the unit)
+   - A COM pin carries the current of every GPO on it. If the total goes over 0.3 A, use more than one COM pin
+   - Voltage applied from outside: -0.6 V to +30 V from the unit's GND
+7) Power the unit from DC 9 to 24 V (36 W max). The +5 V output (up to 5 A in total) works only with DC power.
+   Do not use the +5 V output on USB-C power alone. For +5 V use, DC 12 V, 3 A or more is recommended.
+   For heavy loads (LED tape and so on), use an external supply and switch it with GND out (1 A per pin).
 Note: also check the contact rating and voltage of the equipment you connect.
 
 --------------------------------------------------------------------
