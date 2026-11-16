@@ -37,6 +37,18 @@ h2 .sub{font:700 11px/1 var(--num);letter-spacing:.24em;color:var(--dim)}
 .soon{display:flex;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--line2);background:var(--well);padding:22px 20px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)}
 .soon b{font:800 22px/1 var(--num);letter-spacing:.16em;color:var(--volt)}
 .soon span{color:var(--dim);font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:16px}
+.card{position:relative;border:1px solid var(--line2);border-top:3px solid var(--volt);background:var(--well);padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
+.card .tags{display:flex;gap:6px;flex-wrap:wrap}
+.card h3{margin:2px 0 0;font:italic 800 26px/1.05 var(--num);letter-spacing:.02em;text-transform:uppercase;transform:skewX(-6deg);transform-origin:left}
+.card h3 small{display:block;margin-top:4px;font:700 11px/1 var(--num);letter-spacing:.32em;color:var(--volt);font-style:normal}
+.card p{margin:0;font-size:14px}
+.card ul{margin:0;padding:0;list-style:none;font-size:13px;color:var(--dim)}
+.card li{padding-left:16px;position:relative}
+.card li:before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;background:var(--volt);transform:skewX(-20deg)}
+.go{align-self:flex-start;margin-top:6px;display:inline-flex;align-items:baseline;gap:10px;font:800 14px/1 var(--txt);letter-spacing:.06em;background:var(--volt);color:#000;text-decoration:none;padding:11px 24px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.go span{font:700 11px/1 var(--num);letter-spacing:.2em}
+.go:hover{background:#ffe24d}
 .chip{display:inline-block;border:1px solid var(--line2);padding:3px 10px;font:700 12px/1.4 var(--num);letter-spacing:.1em;color:var(--dim);background:#000;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)}
 .mail{display:inline-flex;align-items:center;gap:10px;font:800 15px/1 var(--txt);letter-spacing:.04em;background:var(--volt);color:#000;text-decoration:none;padding:13px 26px;clip-path:polygon(9px 0,100% 0,calc(100% - 9px) 100%,0 100%);word-break:break-all}
 .mail:hover{background:#ffe24d}
@@ -61,7 +73,21 @@ footer .bolt{width:12px;height:16px;fill:var(--volt);vertical-align:-3px;margin-
 
  <section class="sec" id="products">
   <h2>製品・ツール <span class="sub">PRODUCTS</span></h2>
-  <div class="soon"><b>COMING SOON</b><span>準備中です。公開までしばらくお待ちください。</span></div>
+  <div class="cards">
+   <article class="card">
+    <div class="tags"><span class="chip">WEB APP</span><span class="chip">TIMECODE</span></div>
+    <h3>SMPTE TC GENERATOR <small>TIME OF DAY</small></h3>
+    <p>ブラウザで動く SMPTE タイムコードジェネレーターです。ネットの正確な時刻に合わせて、選んだ地域の時刻（Time of Day）からタイムコードを出します。スレートや時刻合わせなどに使えます。インストールはいりません。</p>
+    <ul>
+     <li>23.98 / 24 / 29.97 / 30 / 59.94 / 60 fps、<span style="white-space:nowrap">DF / NDF</span></li>
+     <li>LTC を音声で出力（レベル調整つき）</li>
+     <li>全画面表示・画面を消さない設定</li>
+     <li>推定誤差・RTT の表示、10分ごとの自動再同期</li>
+    </ul>
+    <a class="go" href="https://popkiss.poppopkiss.workers.dev/" target="_blank" rel="noopener">開く <span>OPEN</span></a>
+   </article>
+  </div>
+  <div class="soon"><b>MORE SOON</b><span>ほかのツールも準備中です。</span></div>
  </section>
 
  <section class="sec" id="contact">
