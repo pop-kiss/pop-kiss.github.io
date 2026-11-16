@@ -1,99 +1,86 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-title-ja="POPKISS — 放送・ライブ制作のツール" data-title-en="POPKISS — Tools for broadcast and live production">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>POPKISS</title>
-<meta name="description" content="POPKISS — 放送・ライブ制作向けの自作ツール">
+<meta name="description" content="POPKISS — 東京のビデオエンジニア。放送・ライブ制作のツールを自作しています。 / Video engineer in Tokyo, building tools for broadcast and live production.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath d='M15 0 3 18h8L8 32 21 12h-8l4-12z' fill='%23ffd60a'/%3E%3C/svg%3E">
-<style>
-:root{--panel:#0b0b0d;--well:#08090b;--line:#25282e;--line2:#3a3f47;--fg:#f4f4f2;--dim:#8f959d;
---volt:#ffd60a;--plate:rgba(14,15,18,.5);--red:#ff3b30;
---num:"Bahnschrift","DIN Alternate","DIN Condensed","Arial Narrow",sans-serif;
---txt:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;color-scheme:dark}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;min-height:100vh;display:flex;flex-direction:column;color:var(--fg);font:15px/1.7 var(--txt);background:var(--panel) linear-gradient(118deg,transparent 0 62%,rgba(255,214,10,.035) 62% 63.5%,transparent 63.5% 66%,rgba(255,59,48,.04) 66% 66.8%,transparent 66.8%) fixed}
-body:before{content:"";position:fixed;z-index:-1;left:50%;top:50%;height:94vh;width:calc(94vh * .77);max-width:118vw;max-height:154vw;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 -1 26 34'%3E%3Cpath d='M15 0 3 18h8L8 32 21 12h-8l4-12z' fill='%239aa0a8' fill-opacity='.16' stroke='%23d4d8de' stroke-opacity='.22' stroke-width='.12' stroke-linejoin='miter'/%3E%3C/svg%3E") no-repeat center/contain;transform:translate(-50%,-50%) rotate(9deg);pointer-events:none}
-a{color:inherit}
-.top{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 28px;padding:22px max(16px,env(safe-area-inset-right)) 16px max(16px,env(safe-area-inset-left));background:linear-gradient(180deg,#000 0,#0e0f12 100%);border-bottom:3px solid var(--volt);position:relative}
-.top:after{content:"";position:absolute;left:0;right:0;bottom:-9px;height:6px;background:repeating-linear-gradient(-55deg,var(--volt) 0 10px,transparent 10px 20px);opacity:.55;pointer-events:none}
-.mark{display:flex;align-items:flex-end;gap:10px;text-decoration:none}
-.mark .bolt{width:30px;height:42px;fill:var(--volt);filter:drop-shadow(0 0 6px rgba(255,214,10,.45));transform:skewX(-8deg)}
-.mark b{display:block;font:italic 800 40px/1 var(--num);letter-spacing:.02em;text-transform:uppercase;transform:skewX(-8deg);text-shadow:0 0 14px rgba(255,214,10,.18)}
-.mark small{display:block;font:700 11px/1 var(--num);letter-spacing:.32em;color:var(--volt);margin-bottom:6px}
-nav{display:flex;flex-wrap:wrap;gap:4px;padding:16px max(16px,env(safe-area-inset-right)) 0 max(22px,env(safe-area-inset-left))}
-nav a{padding:9px 22px 8px;text-decoration:none;color:var(--dim);font:700 13px/1.4 var(--num);letter-spacing:.12em;background:#000;border:1px solid var(--line2);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
-nav a:hover{color:#000;background:var(--volt);border-color:var(--volt)}
-main{width:100%;max-width:1080px;margin:14px auto 40px;padding:26px max(18px,env(safe-area-inset-right)) 40px max(18px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:30px;background:var(--plate);border-left:1px solid var(--line);border-right:1px solid var(--line);clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,0 100%)}
-h2{font:800 16px/1.3 var(--txt);margin:0 0 14px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;letter-spacing:.04em}
-h2:before{content:"";align-self:center;width:7px;height:16px;background:var(--volt);transform:skewX(-20deg);flex:none}
-h2 .sub{font:700 11px/1 var(--num);letter-spacing:.24em;color:var(--dim)}
-.sec{border-top:1px solid var(--line);padding-top:18px;position:relative}
-.sec:before{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--volt)}
-.hero{font:italic 800 clamp(30px,6vw,56px)/1.05 var(--num);letter-spacing:.01em;text-transform:uppercase;margin:6px 0 10px;transform:skewX(-6deg);transform-origin:left}
-.hero em{font-style:inherit;color:var(--volt)}
-.lead{margin:0;color:var(--dim);max-width:60ch}
-.soon{display:flex;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--line2);background:var(--well);padding:22px 20px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)}
-.soon b{font:800 22px/1 var(--num);letter-spacing:.16em;color:var(--volt)}
-.soon span{color:var(--dim);font-size:14px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:16px}
-.card{position:relative;border:1px solid var(--line2);border-top:3px solid var(--volt);background:var(--well);padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
-.card .tags{display:flex;gap:6px;flex-wrap:wrap}
-.card h3{margin:2px 0 0;font:italic 800 26px/1.05 var(--num);letter-spacing:.02em;text-transform:uppercase;transform:skewX(-6deg);transform-origin:left}
-.card h3 small{display:block;margin-top:4px;font:700 11px/1 var(--num);letter-spacing:.32em;color:var(--volt);font-style:normal}
-.card p{margin:0;font-size:14px}
-.card ul{margin:0;padding:0;list-style:none;font-size:13px;color:var(--dim)}
-.card li{padding-left:16px;position:relative}
-.card li:before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;background:var(--volt);transform:skewX(-20deg)}
-.go{align-self:flex-start;margin-top:6px;display:inline-flex;align-items:baseline;gap:10px;font:800 14px/1 var(--txt);letter-spacing:.06em;background:var(--volt);color:#000;text-decoration:none;padding:11px 24px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
-.go span{font:700 11px/1 var(--num);letter-spacing:.2em}
-.go:hover{background:#ffe24d}
-.chip{display:inline-block;border:1px solid var(--line2);padding:3px 10px;font:700 12px/1.4 var(--num);letter-spacing:.1em;color:var(--dim);background:#000;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)}
-.mail{display:inline-flex;align-items:center;gap:10px;font:800 15px/1 var(--txt);letter-spacing:.04em;background:var(--volt);color:#000;text-decoration:none;padding:13px 26px;clip-path:polygon(9px 0,100% 0,calc(100% - 9px) 100%,0 100%);word-break:break-all}
-.mail:hover{background:#ffe24d}
-.note{font-size:12px;color:var(--dim);margin:10px 0 0}
-footer{margin-top:auto;border-top:2px solid var(--volt);background:rgba(0,0,0,.94);padding:14px max(16px,env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));display:flex;gap:10px 20px;flex-wrap:wrap;align-items:center;font:700 12px/1.4 var(--num);letter-spacing:.14em;color:var(--dim)}
-footer .bolt{width:12px;height:16px;fill:var(--volt);vertical-align:-3px;margin-right:6px}
-@media(max-width:600px){.mark b{font-size:32px}.mark .bolt{width:24px;height:34px}main{gap:24px}}
-</style>
+<link rel="stylesheet" href="style.css">
+<script src="site.js"></script>
 </head>
 <body>
 <header class="top">
  <a class="mark" href="./"><svg class="bolt" viewBox="0 0 24 32" aria-hidden="true"><path d="M15 0 3 18h8L8 32 21 12h-8l4-12z"/></svg><div><small>BROADCAST TOOLS</small><b>POPKISS</b></div></a>
+ <span class="sp"></span>
+ <div class="lang" role="group" aria-label="Language"><button type="button" data-l="ja">JA</button><button type="button" data-l="en">EN</button></div>
 </header>
-<nav><a href="#products">PRODUCTS</a><a href="#contact">CONTACT</a></nav>
+<nav><a href="#about">ABOUT</a><a href="#products">PRODUCTS</a><a href="#contact">CONTACT</a></nav>
 
 <main>
  <section>
   <div class="chip">BROADCAST / LIVE PRODUCTION</div>
   <p class="hero">Tools for <em>live</em> production.</p>
-  <p class="lead">放送・ライブ制作の現場向けに、ソフトウェアとハードウェアを自作しています。</p>
+  <p class="lead ja">放送・ライブ制作の現場向けに、ソフトウェアとハードウェアを自作しています。</p>
+  <p class="lead en">Software and hardware, built for broadcast and live production.</p>
+ </section>
+
+ <section class="sec" id="about">
+  <h2><span class="ja">自己紹介</span><span class="en">About</span> <span class="sub">ABOUT</span></h2>
+  <div class="about"><b>POPKISS</b><span class="ja">東京のビデオエンジニア</span><span class="en">Video engineer in Tokyo</span></div>
  </section>
 
  <section class="sec" id="products">
-  <h2>製品・ツール <span class="sub">PRODUCTS</span></h2>
+  <h2><span class="ja">製品・ツール</span><span class="en">Products</span> <span class="sub">PRODUCTS</span></h2>
   <div class="cards">
+   <article class="card">
+    <div class="tags"><span class="chip">HARDWARE</span><span class="chip">TALLY / GPIO</span><span class="chip dev"><span class="ja">開発中</span><span class="en">IN DEVELOPMENT</span></span></div>
+    <h3>KISS-1 <small>TALLY / GPIO INTERFACE</small></h3>
+    <p class="ja">DB25 の全ピンを、入力・出力・COM・GND・5V に自由に割り当てられるタリー / GPIO インターフェイスです。ATEM・TSL 5.0・Ember+ からタリーを受けて接点で出したり、接点入力を TSL 5.0 で送ったりできます。</p>
+    <p class="en">A tally / GPIO interface whose DB25 pins can each be set as input, output, COM, GND or 5 V. It takes tally from ATEM, TSL 5.0 or Ember+ and drives contacts, or sends contact inputs out as TSL 5.0.</p>
+    <ul class="ja">
+     <li>ブラウザから設定、プリセットも保存可能</li>
+     <li>ATEM → TSL 5.0 変換</li>
+     <li>2台以上で、LAN 越しに接点を延長</li>
+     <li>本体で動くスクリプトで、独自の動きを追加</li>
+    </ul>
+    <ul class="en">
+     <li>Set up from a web browser, with presets</li>
+     <li>ATEM to TSL 5.0 conversion</li>
+     <li>Extend contacts over the LAN with two or more units</li>
+     <li>Add your own behavior with scripts that run on the unit</li>
+    </ul>
+    <div class="links"><a class="go" href="kiss-1.html"><span class="ja">詳しく</span><span class="en">Details</span> <span>MORE</span></a></div>
+   </article>
+
    <article class="card">
     <div class="tags"><span class="chip">WEB APP</span><span class="chip">TIMECODE</span></div>
     <h3>SMPTE TC GENERATOR <small>TIME OF DAY</small></h3>
-    <p>ブラウザで動く SMPTE タイムコードジェネレーターです。ネットの正確な時刻に合わせて、選んだ地域の時刻（Time of Day）からタイムコードを出します。スレートや時刻合わせなどに使えます。インストールはいりません。</p>
-    <ul>
+    <p class="ja">ブラウザで動く SMPTE タイムコードジェネレーターです。ネットの正確な時刻に合わせて、選んだ地域の時刻（Time of Day）からタイムコードを出します。スレートや時刻合わせなどに使えます。インストールはいりません。</p>
+    <p class="en">A SMPTE timecode generator that runs in your browser. It syncs to accurate internet time and generates time-of-day timecode for the region you choose. Handy for slates and setting clocks. Nothing to install.</p>
+    <ul class="ja">
      <li>23.98 / 24 / 29.97 / 30 / 59.94 / 60 fps、<span style="white-space:nowrap">DF / NDF</span></li>
      <li>LTC を音声で出力（レベル調整つき）</li>
      <li>全画面表示・画面を消さない設定</li>
      <li>推定誤差・RTT の表示、10分ごとの自動再同期</li>
     </ul>
-    <a class="go" href="https://popkiss.poppopkiss.workers.dev/" target="_blank" rel="noopener">開く <span>OPEN</span></a>
+    <ul class="en">
+     <li>23.98 / 24 / 29.97 / 30 / 59.94 / 60 fps, <span style="white-space:nowrap">DF / NDF</span></li>
+     <li>LTC audio output with level control</li>
+     <li>Fullscreen view and keep-screen-awake option</li>
+     <li>Shows estimated error and RTT, auto-resync every 10 minutes</li>
+    </ul>
+    <div class="links"><a class="go" href="https://popkiss.poppopkiss.workers.dev/" target="_blank" rel="noopener"><span class="ja">開く</span><span class="en">Open</span> <span>OPEN</span></a></div>
    </article>
   </div>
-  <div class="soon"><b>MORE SOON</b><span>ほかのツールも準備中です。</span></div>
+  <div class="soon"><b>MORE SOON</b><span class="ja">ほかのツールも準備中です。</span><span class="en">More tools are on the way.</span></div>
  </section>
 
  <section class="sec" id="contact">
-  <h2>お問い合わせ <span class="sub">CONTACT</span></h2>
+  <h2><span class="ja">お問い合わせ</span><span class="en">Contact</span> <span class="sub">CONTACT</span></h2>
   <a class="mail" href="mailto:pop_kiss1@protonmail.com">pop_kiss1@protonmail.com</a>
-  <p class="note">お問い合わせはメールでお願いします。</p>
+  <p class="note ja">お問い合わせはメールでお願いします。</p>
+  <p class="note en">Please get in touch by email.</p>
  </section>
 </main>
 

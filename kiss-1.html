@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja" data-title-ja="KISS-1 タリー / GPIO インターフェイス — POPKISS" data-title-en="KISS-1 Tally / GPIO Interface — POPKISS">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KISS-1 — POPKISS</title>
+<meta name="description" content="KISS-1 — DB25 の全ピンを自由に割り当てられるタリー / GPIO インターフェイス。 / A tally / GPIO interface with fully assignable DB25 pins.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath d='M15 0 3 18h8L8 32 21 12h-8l4-12z' fill='%23ffd60a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<script src="site.js"></script>
+</head>
+<body>
+<header class="top">
+ <a class="mark" href="./"><svg class="bolt" viewBox="0 0 24 32" aria-hidden="true"><path d="M15 0 3 18h8L8 32 21 12h-8l4-12z"/></svg><div><small>BROADCAST TOOLS</small><b>POPKISS</b></div></a>
+ <span class="sp"></span>
+ <div class="lang" role="group" aria-label="Language"><button type="button" data-l="ja">JA</button><button type="button" data-l="en">EN</button></div>
+</header>
+<nav><a href="./">HOME</a><a href="#features">FEATURES</a><a href="#use">USE</a><a href="#specs">SPECS</a><a href="#contact">CONTACT</a></nav>
+
+<main>
+ <section class="ph">
+  <div>
+   <a class="back" href="./#products">◂ PRODUCTS</a>
+   <div class="kind">Tally / GPIO Interface</div>
+   <h1>KISS-1</h1>
+   <span class="chip dev"><span class="ja">開発中</span><span class="en">IN DEVELOPMENT</span></span>
+   <p class="lead ja">DB25 の 25 本のピンを、入力・出力・COM・GND・5V に自由に割り当てられるタリー / GPIO インターフェイスです。ATEM・TSL 5.0・Ember+ からタリーを受けて接点で出したり、接点の入力を TSL 5.0 で送ったりできます。設定はすべてブラウザから行えます。</p>
+   <p class="lead en">A tally / GPIO interface whose 25 DB25 pins can each be set as input, output, COM, GND or 5 V. It takes tally from ATEM, TSL 5.0 or Ember+ and drives contacts, or sends contact inputs out as TSL 5.0. Everything is set up from a web browser.</p>
+  </div>
+  <figure style="margin:0">
+   <svg class="db" viewBox="0 0 520 200" role="img" aria-label="DB25"><rect x="2" y="12" width="516" height="176" rx="6" fill="#0d0e11" stroke="#3a3f47" stroke-width="1.5"/><circle cx="30" cy="100" r="10" fill="#050506" stroke="#3a3f47" stroke-width="1.5"/><circle cx="490" cy="100" r="10" fill="#050506" stroke="#3a3f47" stroke-width="1.5"/><path d="M66 38H454Q462 38 460 46L440 156Q438 162 431 162H89Q82 162 80 156L60 46Q58 38 66 38Z" fill="#050506" stroke="#8f959d" stroke-width="1.5"/><circle cx="95.0" cy="78" r="8.5" fill="#43b8ff"/><text x="95.0" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">1</text><circle cx="122.5" cy="78" r="8.5" fill="#43b8ff"/><text x="122.5" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">2</text><circle cx="150.0" cy="78" r="8.5" fill="#43b8ff"/><text x="150.0" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">3</text><circle cx="177.5" cy="78" r="8.5" fill="#43b8ff"/><text x="177.5" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">4</text><circle cx="205.0" cy="78" r="8.5" fill="#ffae1a"/><text x="205.0" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">5</text><circle cx="232.5" cy="78" r="8.5" fill="#ffae1a"/><text x="232.5" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">6</text><circle cx="260.0" cy="78" r="8.5" fill="#ffae1a"/><text x="260.0" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">7</text><circle cx="287.5" cy="78" r="8.5" fill="#ffae1a"/><text x="287.5" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">8</text><circle cx="315.0" cy="78" r="8.5" fill="#f2f2f2"/><text x="315.0" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">9</text><circle cx="342.5" cy="78" r="8.5" fill="#ffae1a"/><text x="342.5" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">10</text><circle cx="370.0" cy="78" r="8.5" fill="#ffae1a"/><text x="370.0" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">11</text><circle cx="397.5" cy="78" r="8.5" fill="#ff3b30"/><text x="397.5" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">12</text><circle cx="425.0" cy="78" r="8.5" fill="#8d99a6"/><text x="425.0" y="59" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">13</text><circle cx="108.8" cy="122" r="8.5" fill="#43b8ff"/><text x="108.8" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">14</text><circle cx="136.2" cy="122" r="8.5" fill="#43b8ff"/><text x="136.2" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">15</text><circle cx="163.8" cy="122" r="8.5" fill="#43b8ff"/><text x="163.8" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">16</text><circle cx="191.2" cy="122" r="8.5" fill="#43b8ff"/><text x="191.2" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">17</text><circle cx="218.8" cy="122" r="8.5" fill="#ffae1a"/><text x="218.8" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">18</text><circle cx="246.2" cy="122" r="8.5" fill="#ffae1a"/><text x="246.2" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">19</text><circle cx="273.8" cy="122" r="8.5" fill="#ffae1a"/><text x="273.8" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">20</text><circle cx="301.2" cy="122" r="8.5" fill="#ffae1a"/><text x="301.2" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">21</text><circle cx="328.8" cy="122" r="8.5" fill="#f2f2f2"/><text x="328.8" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">22</text><circle cx="356.2" cy="122" r="8.5" fill="#8d99a6"/><text x="356.2" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">23</text><circle cx="383.8" cy="122" r="8.5" fill="#2a2e35" stroke="#3a3f47"/><text x="383.8" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">24</text><circle cx="411.2" cy="122" r="8.5" fill="#8d99a6"/><text x="411.2" y="149" text-anchor="middle" font-size="9" fill="#8f959d" font-family="Arial Narrow,Arial,sans-serif">25</text></svg>
+   <div class="legend"><span><i style="background:#43b8ff"></i>INPUT</span><span><i style="background:#ffae1a"></i>OUTPUT</span><span><i style="background:#f2f2f2"></i>COM</span><span><i style="background:#8d99a6"></i>GND</span><span><i style="background:#ff3b30"></i>5V</span></div>
+   <p class="note ja">割り当ての一例です。どのピンを何にするかは自由に決められます。</p>
+   <p class="note en">One example assignment. Any pin can be set to any role.</p>
+  </figure>
+ </section>
+
+ <section class="sec" id="features">
+  <h2><span class="ja">主な機能</span><span class="en">Features</span> <span class="sub">FEATURES</span></h2>
+  <div class="feats">
+   <div class="feat">
+    <h3><small>PIN ASSIGN</small><span class="ja">全ピン自由アサイン</span><span class="en">Assign every pin</span></h3>
+    <p class="ja">DB25 のどのピンも、入力・出力・COM・GND・5V に割り当てられます。アナログオーディオケーブル（TASCAM 配列）と Hollyland の配列はプリセット入り。自分の配列も名前を付けて保存できます。</p>
+    <p class="en">Any DB25 pin can be an input, output, COM, GND or 5 V. Presets are built in for analog audio snake cables (TASCAM pinout) and Hollyland, and you can save your own layouts by name.</p>
+   </div>
+   <div class="feat">
+    <h3><small>TALLY SOURCE</small><span class="ja">タリーの入力元</span><span class="en">Tally sources</span></h3>
+    <p class="ja">ATEM から直接、TSL 5.0 の受信、Ember+（コンシューマ）、DB25 の接点入力から選べます。タリー以外の汎用 GPIO としても使えます。</p>
+    <p class="en">Take tally straight from an ATEM, from TSL 5.0, from Ember+ (as a consumer) or from DB25 contact inputs. It also works as a general-purpose GPIO box.</p>
+   </div>
+   <div class="feat">
+    <h3><small>ATEM → TSL</small><span class="ja">ATEM → TSL 5.0 変換</span><span class="en">ATEM to TSL 5.0</span></h3>
+    <p class="ja">受け取ったタリーを TSL 5.0 で送り出します。TSL に対応したマルチビューアーやタリーシステムにそのまま渡せます。</p>
+    <p class="en">Tally it receives is sent out as TSL 5.0, ready for multiviewers and tally systems that speak TSL.</p>
+   </div>
+   <div class="feat">
+    <h3><small>LINK</small><span class="ja">2 台以上で接点を延長</span><span class="en">Extend contacts over LAN</span></h3>
+    <p class="ja">KISS-1 同士を LAN でつなげば、片方の接点入力をもう片方の接点出力に送れます。離れた場所への GPI / タリーの引き回しに。</p>
+    <p class="en">Link two or more KISS-1 units over the LAN and contact inputs on one appear as contact outputs on another. Useful for getting GPI and tally to far-off places.</p>
+   </div>
+   <div class="feat">
+    <h3><small>SCRIPT</small><span class="ja">本体で動くスクリプト</span><span class="en">Scripts on the unit</span></h3>
+    <p class="ja">Arduino のような書き方（setup / loop）のスクリプトを本体で実行できます。ピンの操作やタリーの上書きに加えて、UDP・TCP・HTTP・OSC・TSL の送受信も可能。GPI で vMix や Videohub を切り替える、といった使い方ができます。</p>
+    <p class="en">Run Arduino-style scripts (setup / loop) right on the unit. Drive pins, override tally, and send or receive UDP, TCP, HTTP, OSC and TSL — for example, switch vMix or a Videohub from a GPI.</p>
+   </div>
+   <div class="feat">
+    <h3><small>SETUP</small><span class="ja">設定と表示</span><span class="en">Setup and display</span></h3>
+    <p class="ja">ブラウザの設定ページは日本語・English・Español・中文・한국어に対応。本体の画面には IP アドレスを常に表示し、設定は microSD にも保存できます。</p>
+    <p class="en">The web settings page comes in Japanese, English, Spanish, Chinese and Korean. The unit's display always shows its IP address, and settings can also be saved to microSD.</p>
+   </div>
+  </div>
+ </section>
+
+ <section class="sec" id="use">
+  <h2><span class="ja">使い方の例</span><span class="en">Example setups</span> <span class="sub">USE</span></h2>
+  <p class="fl ja">例 1：ATEM のタリーを接点で出す</p><p class="fl en">Example 1: ATEM tally out as contacts</p>
+  <div class="flow">
+   <div><b>ATEM</b><span class="ja">スイッチャー</span><span class="en">Switcher</span></div>
+   <div class="arr">▸</div>
+   <div><b>KISS-1</b><span class="ja">タリーを受信</span><span class="en">Receives tally</span></div>
+   <div class="arr">▸</div>
+   <div><b>DB25 OUT</b><span class="ja">タリーランプ・ワイヤレスタリーへ接点で</span><span class="en">Contacts to tally lamps or wireless tally</span></div>
+  </div>
+  <p class="fl ja">例 2：接点を LAN で離れた場所へ延長</p><p class="fl en">Example 2: extend contacts over the LAN</p>
+  <div class="flow">
+   <div><b>GPI IN</b><span class="ja">機材からの接点</span><span class="en">Contacts from gear</span></div>
+   <div class="arr">▸</div>
+   <div><b>KISS-1 A</b><span class="ja">接点を TSL 5.0 で送信</span><span class="en">Sends them as TSL 5.0</span></div>
+   <div class="arr">▸</div>
+   <div><b>LAN</b><span class="ja">離れた場所へ</span><span class="en">Across the venue</span></div>
+   <div class="arr">▸</div>
+   <div><b>KISS-1 B</b><span class="ja">接点で出力</span><span class="en">Contact outputs</span></div>
+  </div>
+ </section>
+
+ <section class="sec" id="specs">
+  <h2><span class="ja">仕様</span><span class="en">Specifications</span> <span class="sub">SPECS</span></h2>
+  <table class="spec">
+   <tr><th>Connector</th><td><span class="ja">DB25（全 25 ピンを割り当て可能）</span><span class="en">DB25 (all 25 pins assignable)</span></td></tr>
+   <tr><th>Pin roles</th><td><span class="ja">入力 / 出力 / COM / GND / 5V</span><span class="en">Input / Output / COM / GND / 5 V</span></td></tr>
+   <tr><th>Tally in</th><td><span class="ja">ATEM、TSL 5.0（UDP）、Ember+、DB25 接点入力</span><span class="en">ATEM, TSL 5.0 (UDP), Ember+, DB25 contact inputs</span></td></tr>
+   <tr><th>Tally out</th><td><span class="ja">DB25 接点出力、TSL 5.0</span><span class="en">DB25 contact outputs, TSL 5.0</span></td></tr>
+   <tr><th>Script</th><td><span class="ja">Arduino 風（setup / loop）、UDP・TCP・HTTP・OSC・TSL</span><span class="en">Arduino style (setup / loop); UDP, TCP, HTTP, OSC, TSL</span></td></tr>
+   <tr><th>Network</th><td><span class="ja">有線 LAN（RJ45）</span><span class="en">Wired LAN (RJ45)</span></td></tr>
+   <tr><th>Power</th><td>USB-C / DC 9–24 V</td></tr>
+   <tr><th>Display</th><td><span class="ja">OLED（IP アドレスを常に表示）</span><span class="en">OLED (always shows the IP address)</span></td></tr>
+   <tr><th>Storage</th><td><span class="ja">本体と microSD に設定を保存</span><span class="en">Settings saved on the unit and to microSD</span></td></tr>
+   <tr><th>Web UI</th><td>日本語 / English / Español / 中文 / 한국어</td></tr>
+  </table>
+  <p class="note ja">開発中のため、仕様は変わることがあります。</p>
+  <p class="note en">KISS-1 is still in development, so specifications may change.</p>
+ </section>
+
+ <section class="sec" id="contact">
+  <h2><span class="ja">入手・お問い合わせ</span><span class="en">Availability / Contact</span> <span class="sub">CONTACT</span></h2>
+  <p class="ja" style="margin:0 0 14px">完成品のほか、基板のみ・キットでの提供も予定しています。気になる方はメールでお問い合わせください。</p>
+  <p class="en" style="margin:0 0 14px">Besides finished units, board-only and kit versions are planned. If you're interested, please get in touch by email.</p>
+  <a class="mail" href="mailto:pop_kiss1@protonmail.com?subject=KISS-1">pop_kiss1@protonmail.com</a>
+ </section>
+</main>
+
+<footer><span><svg class="bolt" viewBox="0 0 24 32" aria-hidden="true"><path d="M15 0 3 18h8L8 32 21 12h-8l4-12z"/></svg>© 2026 POPKISS</span></footer>
+</body>
+</html>
