@@ -15,7 +15,7 @@
  <span class="sp"></span>
  <div class="lang" role="group" aria-label="Language"><button type="button" data-l="ja">JA</button><button type="button" data-l="en">EN</button></div>
 </header>
-<nav><a href="./">HOME</a><a href="#features">FEATURES</a><a href="#use">USE</a><a href="#specs">SPECS</a><a href="#contact">CONTACT</a></nav>
+<nav><a href="./">HOME</a><a href="#features">FEATURES</a><a href="#use">USE</a><a href="#specs">SPECS</a><a href="#dev">DEV</a><a href="#contact">CONTACT</a></nav>
 
 <main>
  <section class="ph">
@@ -70,8 +70,8 @@
    </div>
    <div class="feat wide">
     <h3><small>CUSTOM FIRMWARE</small><span class="ja">ESP32 に自由に書き込める</span><span class="en">Flash your own firmware to the ESP32</span></h3>
-    <p class="ja">中身は ESP32-S3 です。USB-C から Arduino IDE などで、自分で作ったファームウェアを自由に書き込めます。KISS-1 の基板を、自分の用途に合わせた専用機として使うこともできます。</p>
-    <p class="en">At its heart is an ESP32-S3. You're free to flash your own firmware over USB-C with the Arduino IDE or other tools, and turn the KISS-1 board into a dedicated box for your own job.</p>
+    <p class="ja">中身は ESP32-S3 です。USB-C から Arduino IDE などで、自分で作ったファームウェアを自由に書き込めます。KISS-1 の基板を、自分の用途に合わせた専用機として使うこともできます。<a href="#dev" style="color:var(--volt)">開発者向け資料</a>もあります。</p>
+    <p class="en">At its heart is an ESP32-S3. You're free to flash your own firmware over USB-C with the Arduino IDE or other tools, and turn the KISS-1 board into a dedicated box for your own job. See the <a href="#dev" style="color:var(--volt)">developer reference</a>.</p>
    </div>
   </div>
  </section>
@@ -115,6 +115,20 @@
   </table>
   <p class="note ja">開発中のため、仕様は変わることがあります。</p>
   <p class="note en">KISS-1 is still in development, so specifications may change.</p>
+ </section>
+
+ <section class="sec" id="dev">
+  <h2><span class="ja">開発者向け資料</span><span class="en">For developers</span> <span class="sub">DEVELOPERS</span></h2>
+  <p class="ja" style="margin:0 0 6px">自分のファームウェアを作るための資料です。ESP32-S3 のピン、I/O 拡張と DB25 ピンの対応、安全のルール、開発環境、すぐ動くサンプルをまとめたテキストファイルで、人間も AI も読めるように書いています。</p>
+  <p class="en" style="margin:0 0 6px">Everything you need to write your own firmware: ESP32-S3 pins, how the I/O expanders map to the DB25 pins, safety rules, the development setup and a ready-to-run sample — in one plain text file written for both people and AI.</p>
+  <p class="note ja" style="margin:0 0 14px">AI に開発を手伝ってもらうときは、このファイルを貼り付けてから作りたいものを伝えてください。</p>
+  <p class="note en" style="margin:0 0 14px">When you ask an AI for help, paste this file in first, then describe what you want to build.</p>
+  <div class="links" style="display:flex;gap:10px;flex-wrap:wrap">
+   <a class="go ja" href="dl/kiss-1_dev_ja.txt" download>日本語版をダウンロード <span>TXT</span></a>
+   <a class="go g ja" href="dl/kiss-1_dev_en.txt" download>英語版 <span>TXT</span></a>
+   <a class="go en" href="dl/kiss-1_dev_en.txt" download>Download <span>TXT</span></a>
+   <a class="go g en" href="dl/kiss-1_dev_ja.txt" download>Japanese <span>TXT</span></a>
+  </div>
  </section>
 
  <section class="sec" id="contact">

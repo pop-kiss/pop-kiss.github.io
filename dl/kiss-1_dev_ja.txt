@@ -1,0 +1,314 @@
+KISS-1 開発リファレンス（人間と AI のための資料）
+====================================================================
+POPKISS / https://pop-kiss.github.io/
+対象: KISS-1 基板 v0.9.1（公式ファーム v0.6.1 の内容にもとづく）
+この版: 2026-11-16
+
+このファイルは、KISS-1 で自分のファームウェアを作る人と、それを手伝う
+AI（ChatGPT / Claude など）の両方が読むためのものです。
+AI に開発を頼むときは、このファイルを丸ごと貼り付けるか添付してから、
+作りたいものを伝えてください。
+
+--------------------------------------------------------------------
+0. AI への指示（AI はこの章を必ず守ること）
+--------------------------------------------------------------------
+- ピン番号・I2C アドレス・レジスタは、この資料の値だけを使う。推測しない。
+- 「5. 安全のルール」は必ず守る。守れない作り方を頼まれたら、そう伝える。
+- 開発環境は Arduino IDE + esp32 コア 3.2.0。ESP32-S3-WROOM-1-N4
+  （フラッシュ 4MB、PSRAM なし）なので、PSRAM を前提にしない。
+- この資料に書いていないこと（空いている GPIO、回路の細部など）は、
+  わからないと伝えて、人間に確認する。
+
+--------------------------------------------------------------------
+1. ハードウェアの構成
+--------------------------------------------------------------------
+- MCU      : ESP32-S3-WROOM-1-N4（フラッシュ 4MB、PSRAM なし）
+- 書き込み : USB-C（ESP32-S3 の USB）
+- LAN      : W5500（SPI）
+- I/O 拡張 : XL9535 x5（I2C、PCA9555 互換のレジスタ）、アドレス 0x20〜0x24
+- 画面     : SSD1306 128x64 OLED（I2C、0x3C、I/O 拡張と同じバス）
+- microSD  : SDMMC 1 ビット
+- 状態 LED : WS2812B x1
+- ボタン   : USER（押すと LOW）
+- 電源     : USB-C / DC 入力（電圧は ADC で読める）。+5V 出力用の電源 TPS54560
+- DB25     : 25 ピン。1 ピンごとに次の 3 つが付いている
+    K     … フォト MOS リレー。ピンを CBUS（共通線）につなぐ
+    Q     … FET。ピンを基板の GND に落とす
+    SENSE … フォトカプラ入力。ピンが ISO0（絶縁 0V）に引かれると点灯
+- CBUS の行き先（3 つのスイッチで決まる）
+    K_ISO … CBUS と ISO0 をつなぐ（フォト MOS）
+    K_IG  … ISO0 と GND をつなぐ（フォト MOS）
+    B5V   … +5V を CBUS に出す（P-ch FET x2）
+
+--------------------------------------------------------------------
+2. ESP32-S3 のピン
+--------------------------------------------------------------------
+  機能                      GPIO
+  ------------------------  ----------------------------------------
+  I2C SDA / SCL             8 / 18      （XL9535 x5 + OLED）
+  W5500 SCK / MISO / MOSI   12 / 13 / 11
+  W5500 CS / INT / RST      10 / 9 / 14
+  microSD CLK / CMD / D0    39 / 38 / 40 （1 ビット SDMMC）
+  状態 LED（WS2812B）       48
+  USER ボタン               47  （INPUT_PULLUP、押すと LOW）
+  K_ISO（CBUS-ISO0）        15  （HIGH = オン）
+  K_IG （ISO0-GND）         16  （HIGH = オン）
+  B5V  （+5V -> CBUS）      17  （HIGH = オン）
+  DC 入力電圧               4   （100k / 10k 分圧。mV x 11 が入力電圧）
+  XL9535 INT                7   （ワイヤード OR、入力が変わると LOW。基板に 10k プルアップ）
+
+--------------------------------------------------------------------
+3. XL9535（I/O 拡張）と DB25 ピンの対応
+--------------------------------------------------------------------
+レジスタ（PCA9555 と同じ。2 バイトずつ自動で進む）
+  0x00 IN0 / 0x01 IN1     入力
+  0x02 OUT0 / 0x03 OUT1   出力
+  0x04 POL0 / 0x05 POL1   極性反転（0 にしておく）
+  0x06 CFG0 / 0x07 CFG1   方向（1 = 入力）
+
+1 チップが 5 ピン分（セル 0〜4）を受け持つ
+  OUT0 のビット c = セル c の K
+  OUT1 のビット c = セル c の Q
+  セル 0〜4 の SENSE = P0.5 / P0.6 / P0.7 / P1.5 / P1.6（LOW = 点灯）
+  P1.7 は予備。出力の LOW のままにする
+  方向の設定値: CFG0 = 0xE0、CFG1 = 0x60
+
+チップごとのピン（セル 0, 1, 2, 3, 4 の順）
+  0x20 : 1, 14, 2, 15, 3
+  0x21 : 16, 4, 17, 5, 18
+  0x22 : 6, 19, 7, 20, 8
+  0x23 : 21, 9, 22, 10, 23
+  0x24 : 11, 24, 12, 25, 13
+
+DB25 ピンごとの一覧
+DB25  XL9535  cell  K(photoMOS)  Q(FET)  SENSE(in)
+----  ------  ----  -----------  ------  ---------
+   1  0x20        0  P0.0         P1.0    P0.5
+   2  0x20        2  P0.2         P1.2    P0.7
+   3  0x20        4  P0.4         P1.4    P1.6
+   4  0x21        1  P0.1         P1.1    P0.6
+   5  0x21        3  P0.3         P1.3    P1.5
+   6  0x22        0  P0.0         P1.0    P0.5
+   7  0x22        2  P0.2         P1.2    P0.7
+   8  0x22        4  P0.4         P1.4    P1.6
+   9  0x23        1  P0.1         P1.1    P0.6
+  10  0x23        3  P0.3         P1.3    P1.5
+  11  0x24        0  P0.0         P1.0    P0.5
+  12  0x24        2  P0.2         P1.2    P0.7
+  13  0x24        4  P0.4         P1.4    P1.6
+  14  0x20        1  P0.1         P1.1    P0.6
+  15  0x20        3  P0.3         P1.3    P1.5
+  16  0x21        0  P0.0         P1.0    P0.5
+  17  0x21        2  P0.2         P1.2    P0.7
+  18  0x21        4  P0.4         P1.4    P1.6
+  19  0x22        1  P0.1         P1.1    P0.6
+  20  0x22        3  P0.3         P1.3    P1.5
+  21  0x23        0  P0.0         P1.0    P0.5
+  22  0x23        2  P0.2         P1.2    P0.7
+  23  0x23        4  P0.4         P1.4    P1.6
+  24  0x24        1  P0.1         P1.1    P0.6
+  25  0x24        3  P0.3         P1.3    P1.5
+
+--------------------------------------------------------------------
+4. ピンの使い方（公式ファームでの呼び方）
+--------------------------------------------------------------------
+  GPI      入力。SENSE を読む。ピンが ISO0 に引かれると ON
+  GPO      出力。ON の間 K を閉じる（CBUS への接点。CBUS が +5V なら 5V 出力）
+  COM      K を閉じたまま（ピン = CBUS）
+  GND GPO  ON の間 Q を閉じる（ピンを GND に落とす）
+  GND      Q を閉じたまま（固定の GND）
+
+CBUS の行き先（COM の基準）
+  ISO（絶縁 0V） : K_ISO = オン
+  GND           : K_ISO = オン、K_IG = オン
+  DRY（どこにも） : 3 つともオフ（GND ピンと入力があるときだけ K_IG = オン）
+  +5V           : B5V = オン、K_IG = オン（K_ISO はオフ）
+
+入力が点灯する条件: そのピンが ISO0 に引かれたとき
+  （COM ピンとショートしたとき。または ISO0 が GND につながっていて GND ピンとショートしたとき）
+
+--------------------------------------------------------------------
+5. 安全のルール（必ず守る）
+--------------------------------------------------------------------
+1) 起動したら、まず B5V・K_ISO・K_IG を LOW にする（OUTPUT にして LOW）。
+2) XL9535 は「OUT を 0 で書く → POL を 0 → CFG を書く」の順で初期化する
+   （電源オン直後の OUT は全部 HIGH なので、先に CFG を書くと出力が一瞬オンになる）。
+3) B5V と K_ISO を同時にオンにしない（+5V が ISO0 を通って GND に流れる）。
+4) B5V がオンのときは、同じピンの K と Q を同時にオンにしない（+5V と GND のショート）。
+5) 切り替えは「切ってからつなぐ」:
+   - CBUS の行き先（K_ISO / K_IG / B5V）を変えるときは、全ピンの K と Q を
+     オフにしてから 20ms 待ち、それから新しい状態にする。
+   - 1 本のピンを K から Q（または Q から K）に変えるときは、先に開いて
+     3ms 待ってから反対側を閉じる。
+   - オンにするときは「バス → ピン」、オフにするときは「ピン → バス」の順。
+6) +5V 出力は全ピン合計で 5A 程度までを目安にする。
+※ つなぐ相手の機材の接点定格・電圧も確認してから使ってください。
+
+--------------------------------------------------------------------
+6. 開発環境
+--------------------------------------------------------------------
+- Arduino IDE + esp32 コア（Espressif）3.2.0
+- ボード            : ESP32S3 Dev Module
+- Flash Size        : 4MB
+- USB CDC On Boot   : Enabled
+- Partition Scheme  : Default 4MB with spiffs
+- ライブラリ        : U8g2（OLED）。公式ファームは ArduinoJson 7 も使用
+- LAN は esp32 コアの ETH ライブラリで動く:
+    SPI.begin(12, 13, 11);
+    ETH.begin(ETH_PHY_W5500, 1, 10, 9, 14, SPI, 20);
+- OLED は U8g2 の U8G2_SSD1306_128X64_NONAME_F_HW_I2C
+- microSD は SD_MMC.setPins(39, 38, 40) のあと SD_MMC.begin("/sdcard", true)
+- 状態 LED は rgbLedWrite(48, r, g, b)
+- 書き込めないときは、ESP32-S3 をダウンロードモードにしてから書き込む
+  （GPIO0 を LOW にした状態で電源を入れる、またはリセットする）
+
+公式ファームに戻したいときは、POPKISS に問い合わせてください。
+自作ファームを書き込むと、公式ファームの機能（Web 設定・タリーなど）はなくなります。
+
+--------------------------------------------------------------------
+7. いちばん小さいサンプル（KISS1_Hello.ino）
+--------------------------------------------------------------------
+- DB25 の 25 番を COM（絶縁 0V）にする
+- 1 番と 25 番を接点でショートすると、2 番と 25 番の間の接点が閉じる
+- OLED に IP アドレスと入力の状態、DC 入力電圧を表示する
+- IP アドレスは 192.168.10.87 固定（ETH.config の行で変えられる）
+（esp32 コア 3.2.0 でコンパイルできることを確認済み）
+
+----------------------------------------------------------------- ここから
+// KISS1_Hello : smallest custom firmware for KISS-1 (board v0.9.1, ESP32-S3)
+//   - DB25 pin 25 = COM (isolated 0 V)
+//   - close a contact between pin 1 and pin 25  ->  pin 2 closes to pin 25 (contact output)
+//   - OLED shows the IP address and the inputs, status LED shows the input
+// Arduino IDE: board "ESP32S3 Dev Module", Flash 4MB, USB CDC On Boot: Enabled (esp32 core 3.2.0)
+// Library: U8g2
+#include <Wire.h>
+#include <SPI.h>
+#include <ETH.h>
+#include <U8g2lib.h>
+
+namespace PINS {
+  const int SDA = 8, SCL = 18;                                              // XL9535 x5 + OLED
+  const int W_SCK = 12, W_MISO = 13, W_MOSI = 11, W_CS = 10, W_INT = 9, W_RST = 14;   // W5500
+  const int LED = 48;                                                       // WS2812B
+  const int BTN = 47;                                                       // USER button (to GND)
+  const int K_ISO = 15;                                                     // CBUS <-> ISO0 (high = on)
+  const int K_IG = 16;                                                      // ISO0 <-> GND  (high = on)
+  const int B5V = 17;                                                       // +5 V -> CBUS  (high = on)
+  const int VSNS = 4;                                                       // DC input, 100k / 10k
+  const int EXP_INT = 7;                                                    // XL9535 INT (low = input changed)
+}
+
+// XL9535 (PCA9555 registers), chip g at 0x20 + g serves these DB25 pins in cell order 0..4
+const uint8_t CELL[5][5] = {
+  {  1, 14,  2, 15,  3 },
+  { 16,  4, 17,  5, 18 },
+  {  6, 19,  7, 20,  8 },
+  { 21,  9, 22, 10, 23 },
+  { 11, 24, 12, 25, 13 },
+};
+const uint8_t SENSE_BIT[5] = { 5, 6, 7, 13, 14 };   // bit in (IN1 << 8 | IN0), active low
+enum { R_IN0 = 0x00, R_OUT0 = 0x02, R_POL0 = 0x04, R_CFG0 = 0x06 };
+
+U8G2_SSD1306_128X64_NONAME_F_HW_I2C oled(U8G2_R0, U8X8_PIN_NONE);
+uint8_t outReg[5][2];                                // OUT0 = K (photoMOS to CBUS), OUT1 = Q (FET to GND)
+
+bool wr2(uint8_t a, uint8_t reg, uint8_t v0, uint8_t v1) {
+  Wire.beginTransmission(a); Wire.write(reg); Wire.write(v0); Wire.write(v1);
+  return Wire.endTransmission() == 0;
+}
+bool rd2(uint8_t a, uint8_t reg, uint8_t &v0, uint8_t &v1) {
+  Wire.beginTransmission(a); Wire.write(reg);
+  if (Wire.endTransmission(false) != 0) return false;
+  if (Wire.requestFrom((int)a, 2) != 2) return false;
+  v0 = Wire.read(); v1 = Wire.read();
+  return true;
+}
+
+// which chip / cell serves DB25 pin p (1..25)
+bool findPin(int p, int &g, int &c) {
+  for (g = 0; g < 5; g++) for (c = 0; c < 5; c++) if (CELL[g][c] == p) return true;
+  return false;
+}
+// K = pin to CBUS (contact output / COM).  reg 0 = K, reg 1 = Q
+void setPin(int p, int reg, bool on) {
+  int g, c;
+  if (!findPin(p, g, c)) return;
+  if (on) outReg[g][reg] |= 1 << c; else outReg[g][reg] &= ~(1 << c);
+  wr2(0x20 + g, R_OUT0, outReg[g][0], outReg[g][1]);
+}
+// bit (p-1) = 1 while pin p is pulled to ISO0 (opto lit)
+uint32_t readInputs() {
+  uint32_t v = 0;
+  for (int g = 0; g < 5; g++) {
+    uint8_t i0, i1;
+    if (!rd2(0x20 + g, R_IN0, i0, i1)) continue;
+    uint16_t in = (uint16_t)(i1 << 8) | i0;
+    for (int c = 0; c < 5; c++)
+      if (!((in >> SENSE_BIT[c]) & 1)) v |= 1u << (CELL[g][c] - 1);
+  }
+  return v;
+}
+
+void setup() {
+  // 1. bus switches off before anything else
+  pinMode(PINS::B5V, OUTPUT);   digitalWrite(PINS::B5V, LOW);
+  pinMode(PINS::K_ISO, OUTPUT); digitalWrite(PINS::K_ISO, LOW);
+  pinMode(PINS::K_IG, OUTPUT);  digitalWrite(PINS::K_IG, LOW);
+  pinMode(PINS::BTN, INPUT_PULLUP);
+  pinMode(PINS::EXP_INT, INPUT);
+  Serial.begin(115200);
+
+  // 2. expanders: outputs latched low first, then the directions (P0.5-7 and P1.5-6 are inputs)
+  Wire.begin(PINS::SDA, PINS::SCL, 400000);
+  Wire.setTimeOut(20);
+  memset(outReg, 0, sizeof(outReg));
+  for (int g = 0; g < 5; g++) {
+    uint8_t a = 0x20 + g;
+    bool ok = wr2(a, R_OUT0, 0, 0) && wr2(a, R_POL0, 0, 0) && wr2(a, R_CFG0, 0xE0, 0x60);
+    Serial.printf("XL9535 0x%02X %s\n", a, ok ? "ok" : "NOT FOUND");
+  }
+
+  // 3. OLED (same I2C bus, 0x3C)
+  oled.begin();
+
+  // 4. LAN (W5500), fixed IP
+  SPI.begin(PINS::W_SCK, PINS::W_MISO, PINS::W_MOSI);
+  ETH.begin(ETH_PHY_W5500, 1, PINS::W_CS, PINS::W_INT, PINS::W_RST, SPI, 20);
+  ETH.config(IPAddress(192, 168, 10, 87), IPAddress(192, 168, 10, 1), IPAddress(255, 255, 255, 0));
+
+  // 5. COM = isolated 0 V: CBUS -> ISO0, then pin 25 to CBUS
+  digitalWrite(PINS::K_ISO, HIGH);
+  setPin(25, 0, true);
+}
+
+void loop() {
+  static uint32_t last = 0xFFFFFFFF, lastDraw = 0;
+  uint32_t in = readInputs();
+  bool pin1 = in & 1u;                                // bit 0 = DB25 pin 1
+  if (in != last) {
+    last = in;
+    setPin(2, 0, pin1);                               // pin 2 contact follows pin 1
+    rgbLedWrite(PINS::LED, pin1 ? 40 : 0, pin1 ? 0 : 20, 0);
+    Serial.printf("inputs %07lX\n", (unsigned long)in);
+  }
+  if (millis() - lastDraw > 200) {
+    lastDraw = millis();
+    char ip[20], vin[20];
+    snprintf(ip, sizeof(ip), "%s", ETH.localIP().toString().c_str());
+    snprintf(vin, sizeof(vin), "DC %.1f V", analogReadMilliVolts(PINS::VSNS) * 11 / 1000.0f);
+    oled.clearBuffer();
+    oled.setFont(u8g2_font_6x12_tf);
+    oled.drawStr(0, 12, "KISS1_Hello");
+    oled.drawStr(0, 28, ip);
+    oled.drawStr(0, 44, pin1 ? "PIN1: ON" : "PIN1: off");
+    oled.drawStr(0, 60, vin);
+    oled.sendBuffer();
+  }
+  delay(2);
+}
+----------------------------------------------------------------- ここまで
+
+--------------------------------------------------------------------
+8. 問い合わせ
+--------------------------------------------------------------------
+pop_kiss1@protonmail.com

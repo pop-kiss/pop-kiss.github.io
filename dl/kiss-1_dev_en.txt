@@ -1,0 +1,313 @@
+KISS-1 Developer Reference (for humans and AI)
+====================================================================
+POPKISS / https://pop-kiss.github.io/
+Covers: KISS-1 board v0.9.1 (based on official firmware v0.6.1)
+This edition: 2026-11-16
+
+This file is for people writing their own firmware for KISS-1, and for
+the AI (ChatGPT, Claude and so on) helping them. When you ask an AI for
+help, paste or attach this whole file first, then say what you want to build.
+
+--------------------------------------------------------------------
+0. Instructions for the AI (always follow this section)
+--------------------------------------------------------------------
+- Use only the pin numbers, I2C addresses and registers in this file. Do not guess.
+- Always follow "5. Safety rules". If a request cannot be done within them, say so.
+- Target Arduino IDE with esp32 core 3.2.0. The module is ESP32-S3-WROOM-1-N4
+  (4 MB flash, no PSRAM), so do not rely on PSRAM.
+- For anything not in this file (free GPIOs, circuit details and so on),
+  say you don't know and ask the human.
+
+--------------------------------------------------------------------
+1. Hardware overview
+--------------------------------------------------------------------
+- MCU        : ESP32-S3-WROOM-1-N4 (4 MB flash, no PSRAM)
+- Flashing   : USB-C (native USB of the ESP32-S3)
+- LAN        : W5500 (SPI)
+- I/O        : 5x XL9535 (I2C, PCA9555-compatible registers) at 0x20 to 0x24
+- Display    : SSD1306 128x64 OLED (I2C, 0x3C, same bus as the expanders)
+- microSD    : SDMMC, 1-bit
+- Status LED : 1x WS2812B
+- Button     : USER (reads LOW when pressed)
+- Power      : USB-C / DC input (voltage readable by ADC). TPS54560 supply for the +5 V output
+- DB25       : 25 pins. Every pin has three parts:
+    K     ... photoMOS relay. Connects the pin to CBUS (the common bus)
+    Q     ... FET. Pulls the pin to board GND
+    SENSE ... optocoupler input. Lit when the pin is pulled to ISO0 (isolated 0 V)
+- Where CBUS goes (set by three switches):
+    K_ISO ... connects CBUS to ISO0 (photoMOS)
+    K_IG  ... connects ISO0 to GND (photoMOS)
+    B5V   ... puts +5 V on CBUS (2x P-channel FET)
+
+--------------------------------------------------------------------
+2. ESP32-S3 pins
+--------------------------------------------------------------------
+  Function                  GPIO
+  ------------------------  ----------------------------------------
+  I2C SDA / SCL             8 / 18      (5x XL9535 + OLED)
+  W5500 SCK / MISO / MOSI   12 / 13 / 11
+  W5500 CS / INT / RST      10 / 9 / 14
+  microSD CLK / CMD / D0    39 / 38 / 40 (1-bit SDMMC)
+  Status LED (WS2812B)      48
+  USER button               47  (INPUT_PULLUP, LOW when pressed)
+  K_ISO (CBUS-ISO0)         15  (HIGH = on)
+  K_IG  (ISO0-GND)          16  (HIGH = on)
+  B5V   (+5 V -> CBUS)      17  (HIGH = on)
+  DC input voltage          4   (100k / 10k divider: mV x 11 = input voltage)
+  XL9535 INT                7   (wired-OR, LOW when an input changes; 10k pull-up on the board)
+
+--------------------------------------------------------------------
+3. XL9535 expanders and DB25 pins
+--------------------------------------------------------------------
+Registers (same as PCA9555, auto-increment in pairs)
+  0x00 IN0 / 0x01 IN1     inputs
+  0x02 OUT0 / 0x03 OUT1   outputs
+  0x04 POL0 / 0x05 POL1   polarity inversion (keep at 0)
+  0x06 CFG0 / 0x07 CFG1   direction (1 = input)
+
+Each chip serves 5 pins (cells 0 to 4)
+  OUT0 bit c = K of cell c
+  OUT1 bit c = Q of cell c
+  SENSE of cells 0 to 4 = P0.5 / P0.6 / P0.7 / P1.5 / P1.6 (LOW = lit)
+  P1.7 is spare: keep it as an output, LOW
+  Direction values: CFG0 = 0xE0, CFG1 = 0x60
+
+Pins per chip (in cell order 0, 1, 2, 3, 4)
+  0x20 : 1, 14, 2, 15, 3
+  0x21 : 16, 4, 17, 5, 18
+  0x22 : 6, 19, 7, 20, 8
+  0x23 : 21, 9, 22, 10, 23
+  0x24 : 11, 24, 12, 25, 13
+
+Table by DB25 pin
+DB25  XL9535  cell  K(photoMOS)  Q(FET)  SENSE(in)
+----  ------  ----  -----------  ------  ---------
+   1  0x20        0  P0.0         P1.0    P0.5
+   2  0x20        2  P0.2         P1.2    P0.7
+   3  0x20        4  P0.4         P1.4    P1.6
+   4  0x21        1  P0.1         P1.1    P0.6
+   5  0x21        3  P0.3         P1.3    P1.5
+   6  0x22        0  P0.0         P1.0    P0.5
+   7  0x22        2  P0.2         P1.2    P0.7
+   8  0x22        4  P0.4         P1.4    P1.6
+   9  0x23        1  P0.1         P1.1    P0.6
+  10  0x23        3  P0.3         P1.3    P1.5
+  11  0x24        0  P0.0         P1.0    P0.5
+  12  0x24        2  P0.2         P1.2    P0.7
+  13  0x24        4  P0.4         P1.4    P1.6
+  14  0x20        1  P0.1         P1.1    P0.6
+  15  0x20        3  P0.3         P1.3    P1.5
+  16  0x21        0  P0.0         P1.0    P0.5
+  17  0x21        2  P0.2         P1.2    P0.7
+  18  0x21        4  P0.4         P1.4    P1.6
+  19  0x22        1  P0.1         P1.1    P0.6
+  20  0x22        3  P0.3         P1.3    P1.5
+  21  0x23        0  P0.0         P1.0    P0.5
+  22  0x23        2  P0.2         P1.2    P0.7
+  23  0x23        4  P0.4         P1.4    P1.6
+  24  0x24        1  P0.1         P1.1    P0.6
+  25  0x24        3  P0.3         P1.3    P1.5
+
+--------------------------------------------------------------------
+4. Pin roles (names used by the official firmware)
+--------------------------------------------------------------------
+  GPI      input. Reads SENSE. ON while the pin is pulled to ISO0
+  GPO      output. K closes while ON (contact to CBUS; 5 V out when CBUS is +5 V)
+  COM      K always closed (pin = CBUS)
+  GND GPO  Q closes while ON (pin pulled to GND)
+  GND      Q always closed (fixed GND)
+
+Where CBUS goes (the COM reference)
+  ISO (isolated 0 V) : K_ISO on
+  GND                : K_ISO on, K_IG on
+  DRY (nowhere)      : all three off (K_IG on only when there are both GND pins and inputs)
+  +5 V               : B5V on, K_IG on (K_ISO off)
+
+An input lights when its pin is pulled to ISO0
+  (shorted to a COM pin, or to a GND pin while ISO0 is tied to GND)
+
+--------------------------------------------------------------------
+5. Safety rules (always follow)
+--------------------------------------------------------------------
+1) At boot, set B5V, K_ISO and K_IG LOW first (OUTPUT, then LOW).
+2) Initialise each XL9535 in this order: write OUT as 0 -> POL as 0 -> CFG.
+   (OUT is all HIGH at power-on, so writing CFG first would switch outputs on for a moment.)
+3) Never turn B5V and K_ISO on together (+5 V would flow through ISO0 to GND).
+4) While B5V is on, never turn on K and Q of the same pin together (+5 V shorted to GND).
+5) Break before make:
+   - When CBUS changes (K_ISO / K_IG / B5V), turn every pin's K and Q off,
+     wait 20 ms, then write the new state.
+   - When one pin moves from K to Q (or Q to K), open it first, wait 3 ms,
+     then close the other side.
+   - Switching on: bus first, then pins. Switching off: pins first, then bus.
+6) Keep the +5 V output to about 5 A in total across all pins.
+Note: also check the contact rating and voltage of the equipment you connect.
+
+--------------------------------------------------------------------
+6. Development environment
+--------------------------------------------------------------------
+- Arduino IDE + esp32 core (Espressif) 3.2.0
+- Board             : ESP32S3 Dev Module
+- Flash Size        : 4MB
+- USB CDC On Boot   : Enabled
+- Partition Scheme  : Default 4MB with spiffs
+- Libraries         : U8g2 (OLED). The official firmware also uses ArduinoJson 7
+- LAN works with the ETH library of the esp32 core:
+    SPI.begin(12, 13, 11);
+    ETH.begin(ETH_PHY_W5500, 1, 10, 9, 14, SPI, 20);
+- OLED: U8g2 U8G2_SSD1306_128X64_NONAME_F_HW_I2C
+- microSD: SD_MMC.setPins(39, 38, 40), then SD_MMC.begin("/sdcard", true)
+- Status LED: rgbLedWrite(48, r, g, b)
+- If uploading fails, put the ESP32-S3 into download mode first
+  (power up or reset with GPIO0 held LOW).
+
+To go back to the official firmware, contact POPKISS.
+Flashing your own firmware removes the official features (web settings, tally and so on).
+
+--------------------------------------------------------------------
+7. Smallest sample (KISS1_Hello.ino)
+--------------------------------------------------------------------
+- Makes DB25 pin 25 a COM (isolated 0 V)
+- Shorting pin 1 to pin 25 closes the contact between pin 2 and pin 25
+- Shows the IP address, the input state and the DC input voltage on the OLED
+- Fixed IP 192.168.10.87 (change it on the ETH.config line)
+(Confirmed to compile with esp32 core 3.2.0)
+
+----------------------------------------------------------------- begin
+// KISS1_Hello : smallest custom firmware for KISS-1 (board v0.9.1, ESP32-S3)
+//   - DB25 pin 25 = COM (isolated 0 V)
+//   - close a contact between pin 1 and pin 25  ->  pin 2 closes to pin 25 (contact output)
+//   - OLED shows the IP address and the inputs, status LED shows the input
+// Arduino IDE: board "ESP32S3 Dev Module", Flash 4MB, USB CDC On Boot: Enabled (esp32 core 3.2.0)
+// Library: U8g2
+#include <Wire.h>
+#include <SPI.h>
+#include <ETH.h>
+#include <U8g2lib.h>
+
+namespace PINS {
+  const int SDA = 8, SCL = 18;                                              // XL9535 x5 + OLED
+  const int W_SCK = 12, W_MISO = 13, W_MOSI = 11, W_CS = 10, W_INT = 9, W_RST = 14;   // W5500
+  const int LED = 48;                                                       // WS2812B
+  const int BTN = 47;                                                       // USER button (to GND)
+  const int K_ISO = 15;                                                     // CBUS <-> ISO0 (high = on)
+  const int K_IG = 16;                                                      // ISO0 <-> GND  (high = on)
+  const int B5V = 17;                                                       // +5 V -> CBUS  (high = on)
+  const int VSNS = 4;                                                       // DC input, 100k / 10k
+  const int EXP_INT = 7;                                                    // XL9535 INT (low = input changed)
+}
+
+// XL9535 (PCA9555 registers), chip g at 0x20 + g serves these DB25 pins in cell order 0..4
+const uint8_t CELL[5][5] = {
+  {  1, 14,  2, 15,  3 },
+  { 16,  4, 17,  5, 18 },
+  {  6, 19,  7, 20,  8 },
+  { 21,  9, 22, 10, 23 },
+  { 11, 24, 12, 25, 13 },
+};
+const uint8_t SENSE_BIT[5] = { 5, 6, 7, 13, 14 };   // bit in (IN1 << 8 | IN0), active low
+enum { R_IN0 = 0x00, R_OUT0 = 0x02, R_POL0 = 0x04, R_CFG0 = 0x06 };
+
+U8G2_SSD1306_128X64_NONAME_F_HW_I2C oled(U8G2_R0, U8X8_PIN_NONE);
+uint8_t outReg[5][2];                                // OUT0 = K (photoMOS to CBUS), OUT1 = Q (FET to GND)
+
+bool wr2(uint8_t a, uint8_t reg, uint8_t v0, uint8_t v1) {
+  Wire.beginTransmission(a); Wire.write(reg); Wire.write(v0); Wire.write(v1);
+  return Wire.endTransmission() == 0;
+}
+bool rd2(uint8_t a, uint8_t reg, uint8_t &v0, uint8_t &v1) {
+  Wire.beginTransmission(a); Wire.write(reg);
+  if (Wire.endTransmission(false) != 0) return false;
+  if (Wire.requestFrom((int)a, 2) != 2) return false;
+  v0 = Wire.read(); v1 = Wire.read();
+  return true;
+}
+
+// which chip / cell serves DB25 pin p (1..25)
+bool findPin(int p, int &g, int &c) {
+  for (g = 0; g < 5; g++) for (c = 0; c < 5; c++) if (CELL[g][c] == p) return true;
+  return false;
+}
+// K = pin to CBUS (contact output / COM).  reg 0 = K, reg 1 = Q
+void setPin(int p, int reg, bool on) {
+  int g, c;
+  if (!findPin(p, g, c)) return;
+  if (on) outReg[g][reg] |= 1 << c; else outReg[g][reg] &= ~(1 << c);
+  wr2(0x20 + g, R_OUT0, outReg[g][0], outReg[g][1]);
+}
+// bit (p-1) = 1 while pin p is pulled to ISO0 (opto lit)
+uint32_t readInputs() {
+  uint32_t v = 0;
+  for (int g = 0; g < 5; g++) {
+    uint8_t i0, i1;
+    if (!rd2(0x20 + g, R_IN0, i0, i1)) continue;
+    uint16_t in = (uint16_t)(i1 << 8) | i0;
+    for (int c = 0; c < 5; c++)
+      if (!((in >> SENSE_BIT[c]) & 1)) v |= 1u << (CELL[g][c] - 1);
+  }
+  return v;
+}
+
+void setup() {
+  // 1. bus switches off before anything else
+  pinMode(PINS::B5V, OUTPUT);   digitalWrite(PINS::B5V, LOW);
+  pinMode(PINS::K_ISO, OUTPUT); digitalWrite(PINS::K_ISO, LOW);
+  pinMode(PINS::K_IG, OUTPUT);  digitalWrite(PINS::K_IG, LOW);
+  pinMode(PINS::BTN, INPUT_PULLUP);
+  pinMode(PINS::EXP_INT, INPUT);
+  Serial.begin(115200);
+
+  // 2. expanders: outputs latched low first, then the directions (P0.5-7 and P1.5-6 are inputs)
+  Wire.begin(PINS::SDA, PINS::SCL, 400000);
+  Wire.setTimeOut(20);
+  memset(outReg, 0, sizeof(outReg));
+  for (int g = 0; g < 5; g++) {
+    uint8_t a = 0x20 + g;
+    bool ok = wr2(a, R_OUT0, 0, 0) && wr2(a, R_POL0, 0, 0) && wr2(a, R_CFG0, 0xE0, 0x60);
+    Serial.printf("XL9535 0x%02X %s\n", a, ok ? "ok" : "NOT FOUND");
+  }
+
+  // 3. OLED (same I2C bus, 0x3C)
+  oled.begin();
+
+  // 4. LAN (W5500), fixed IP
+  SPI.begin(PINS::W_SCK, PINS::W_MISO, PINS::W_MOSI);
+  ETH.begin(ETH_PHY_W5500, 1, PINS::W_CS, PINS::W_INT, PINS::W_RST, SPI, 20);
+  ETH.config(IPAddress(192, 168, 10, 87), IPAddress(192, 168, 10, 1), IPAddress(255, 255, 255, 0));
+
+  // 5. COM = isolated 0 V: CBUS -> ISO0, then pin 25 to CBUS
+  digitalWrite(PINS::K_ISO, HIGH);
+  setPin(25, 0, true);
+}
+
+void loop() {
+  static uint32_t last = 0xFFFFFFFF, lastDraw = 0;
+  uint32_t in = readInputs();
+  bool pin1 = in & 1u;                                // bit 0 = DB25 pin 1
+  if (in != last) {
+    last = in;
+    setPin(2, 0, pin1);                               // pin 2 contact follows pin 1
+    rgbLedWrite(PINS::LED, pin1 ? 40 : 0, pin1 ? 0 : 20, 0);
+    Serial.printf("inputs %07lX\n", (unsigned long)in);
+  }
+  if (millis() - lastDraw > 200) {
+    lastDraw = millis();
+    char ip[20], vin[20];
+    snprintf(ip, sizeof(ip), "%s", ETH.localIP().toString().c_str());
+    snprintf(vin, sizeof(vin), "DC %.1f V", analogReadMilliVolts(PINS::VSNS) * 11 / 1000.0f);
+    oled.clearBuffer();
+    oled.setFont(u8g2_font_6x12_tf);
+    oled.drawStr(0, 12, "KISS1_Hello");
+    oled.drawStr(0, 28, ip);
+    oled.drawStr(0, 44, pin1 ? "PIN1: ON" : "PIN1: off");
+    oled.drawStr(0, 60, vin);
+    oled.sendBuffer();
+  }
+  delay(2);
+}
+----------------------------------------------------------------- end
+
+--------------------------------------------------------------------
+8. Contact
+--------------------------------------------------------------------
+pop_kiss1@protonmail.com
