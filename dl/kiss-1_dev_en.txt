@@ -25,7 +25,12 @@ help, paste or attach this whole file first, then say what you want to build.
 - Flashing   : USB-C (native USB of the ESP32-S3)
 - LAN        : W5500 (SPI)
 - I/O        : 5x XL9535 (I2C, PCA9555-compatible registers) at 0x20 to 0x24
-- Display    : SSD1306 128x64 OLED (I2C, 0x3C, same bus as the expanders)
+- Display    : 0.96" 128x64 OLED (SSD1306 / SSD1315, I2C, 0x3C, same bus as the expanders),
+               connected by cable to a 4-pin header on the board.
+               The SH1106 found on many 1.3" modules uses a different controller and will not display
+               correctly as is (the image shifts or breaks up). To use one, change the U8g2 declaration to
+               U8G2_SH1106_128X64_NONAME_F_HW_I2C (one line in oled.cpp of the official firmware).
+               When buying a spare, choose one listed as "0.96 inch, SSD1306 (or SSD1315), I2C, 4-pin".
 - microSD    : SDMMC, 1-bit
 - Status LED : 1x WS2812B
 - Button     : USER (reads LOW when pressed)
