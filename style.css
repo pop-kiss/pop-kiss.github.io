@@ -106,3 +106,13 @@ table.spec th{width:34%;font:700 12px/1.6 var(--num);letter-spacing:.14em;color:
 .photo figcaption b{font:800 11px/1 var(--num);letter-spacing:.24em;color:var(--volt)}
 .thumb{display:block;margin:-4px 0 4px;padding:14px 12px;background:radial-gradient(ellipse at 50% 45%,#30343b 0%,#15171b 75%);border:1px solid var(--line)}
 .dbwrap{max-width:640px}
+/* ---- annotated photos ---- */
+.anno .pic{position:relative}
+.mk{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--volt);color:#000;font:800 13px/1 var(--num);box-shadow:0 0 0 2px #000,0 2px 8px rgba(0,0,0,.6);flex:none}
+.anno .pic .mk{position:absolute;transform:translate(-50%,-50%)}
+.parts{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px 18px}
+.parts li{display:flex;gap:10px;align-items:flex-start}
+.parts b{display:block;font:800 14px/1.5 var(--txt);color:var(--fg)}
+.parts p{margin:2px 0 0;font-size:13px;color:#c9ccd1}
+.anno figcaption{margin-top:10px}
+@media(max-width:600px){.anno .pic .mk{width:15px;height:15px;font-size:9px;box-shadow:0 0 0 1.5px #000}}
