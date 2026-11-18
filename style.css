@@ -116,3 +116,18 @@ table.spec th{width:34%;font:700 12px/1.6 var(--num);letter-spacing:.14em;color:
 .parts p{margin:2px 0 0;font-size:13px;color:#c9ccd1}
 .anno figcaption{margin-top:10px}
 @media(max-width:600px){.anno .pic .mk{width:15px;height:15px;font-size:9px;box-shadow:0 0 0 1.5px #000}}
+/* ---- CG and dimensions ---- */
+.cg{margin:0;background:#fff;border:1px solid var(--line2);padding:10px}
+.cg img{display:block;width:100%;height:auto}
+.cg2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dims{margin:18px 0}
+.dimnum{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font:italic 800 clamp(30px,5vw,46px)/1 var(--num);transform:skewX(-6deg);transform-origin:left;margin-bottom:10px}
+.dimnum i{font-style:normal;color:var(--volt);font-size:.6em}
+.dimnum span{font-size:.4em;letter-spacing:.2em;color:var(--dim)}
+.dims p{margin:0;font-size:14px;color:#c9ccd1;max-width:80ch}
+.sheet a{display:block}
+.sheet figcaption{margin-top:8px;font-size:12px;color:#555}
+.ph2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ph2 .photo{margin:0}
+.anno .pic img{filter:none}
+@media(max-width:760px){.cg2,.ph2{grid-template-columns:1fr}}
