@@ -1,7 +1,7 @@
 KISS-1 Developer Reference (for humans and AI)
 ====================================================================
 POPKISS / https://pop-kiss.github.io/
-Covers: KISS-1 board v0.9.1 (based on official firmware v0.6.4)
+Covers: KISS-1 board v0.9.1 (based on official firmware v0.6.5)
 This edition: 2026-11-18
 
 This file is for people writing their own firmware for KISS-1, and for
