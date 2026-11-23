@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja" data-title-ja="KISS-1 取扱説明書 — POPKISS" data-title-en="KISS-1 User Manual — POPKISS">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KISS-1 取扱説明書 — POPKISS</title>
+<meta name="description" content="KISS-1 取扱説明書（ファーム v0.7.7） / KISS-1 user manual (firmware v0.7.7)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath d='M15 0 3 18h8L8 32 21 12h-8l4-12z' fill='%23ffd60a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css?v=0.25">
+<script src="site.js?v=0.25"></script>
+</head>
+<body class="manual">
+<header class="top">
+ <a class="mark" href="./"><svg class="bolt" viewBox="0 0 24 32" aria-hidden="true"><path d="M15 0 3 18h8L8 32 21 12h-8l4-12z"/></svg><div><small>BROADCAST TOOLS</small><b>POPKISS</b></div></a>
+ <span class="sp"></span>
+ <div class="lang" role="group" aria-label="Language"><button type="button" data-l="ja">JA</button><button type="button" data-l="en">EN</button></div>
+</header>
+<nav><a href="./">HOME</a><a href="kiss-1.html">KISS-1</a><a href="kiss-1-sim.html">DEMO</a><a href="#" onclick="window.print();return false">PRINT</a></nav>
+
+<main>
+ <section>
+  <a class="back" href="kiss-1.html">◂ KISS-1</a>
+  <div class="kind"><span class="ja">取扱説明書</span><span class="en">User manual</span></div>
+  <h1 class="mtitle">KISS-1 <span><span class="ja">取扱説明書</span><span class="en">Manual</span></span></h1>
+  <p class="note"><span class="ja">2026 年 11 月 23 日 · ファーム v0.7.7</span><span class="en">23 November 2026 · firmware v0.7.7</span></p>
+  <div class="toc"><a href="#intro"><span class="ja">はじめに</span><span class="en">Introduction</span></a><a href="#parts"><span class="ja">各部の名前</span><span class="en">Parts</span></a><a href="#connect"><span class="ja">接続</span><span class="en">Connecting</span></a><a href="#start"><span class="ja">はじめて使う</span><span class="en">Getting started</span></a><a href="#settings"><span class="ja">設定ページ（設定と状態）</span><span class="en">Settings page (Settings and status)</span></a><a href="#pins"><span class="ja">ピンの設定（ピン割り当て）</span><span class="en">Pin setup (Pins page)</span></a><a href="#script"><span class="ja">スクリプト</span><span class="en">Scripts</span></a><a href="#sd"><span class="ja">microSD</span><span class="en">microSD</span></a><a href="#trouble"><span class="ja">困ったとき</span><span class="en">Troubleshooting</span></a><a href="#spec"><span class="ja">仕様</span><span class="en">Specifications</span></a></div>
+ </section>
+ <section class="sec" id="intro">
+  <h2><span class="ja">はじめに</span><span class="en">Introduction</span> <span class="sub">INTRODUCTION</span></h2>
+  <p class="ja mp">KISS-1 は、ネットワークのタリーと DB25 の接点（GPI / GPO）を相互に変換するハーフラック 1U の機材です。設定はすべてブラウザの設定ページから行います。この説明書はファーム v0.7.7 に合わせています。</p><p class="en mp">KISS-1 is a half-rack 1U unit that converts between network tally and DB25 contacts (GPI / GPO) in both directions. Everything is set up from a settings page in a web browser. This manual covers firmware v0.7.7.</p>
+  <h3 class="mh3"><span class="ja">できること</span><span class="en">What it does</span></h3>
+  <ul class="ml">
+   <li><span class="ja"><b>タリーを受けて接点で出す：</b>ATEM・TSL 5.0 からタリーを受け、DB25 の GPO を赤（PGM）・緑（PVW）で点けます。</span><span class="en"><b>Tally in, contacts out:</b> takes tally from ATEM or TSL 5.0 and lights DB25 GPOs red (PGM) and green (PVW).</span></li>
+   <li><span class="ja"><b>接点を受けてネットワークへ送る：</b>DB25 の GPI で受けた接点を、TSL 5.0 で別の機器（もう 1 台の KISS-1 や LORA-TALLY 親機など）へ送ります。</span><span class="en"><b>Contacts in, network out:</b> contacts received on DB25 GPIs are sent as TSL 5.0 to other gear (another KISS-1, a LORA-TALLY base unit and so on).</span></li>
+   <li><span class="ja"><b>ピンを自由に割り当てる：</b>DB25 の 25 本のピンを、GPI・GPO・COM・GND・+5V などに 1 本ずつ割り当てられます。</span><span class="en"><b>Assign every pin:</b> each of the 25 DB25 pins can be set as GPI, GPO, COM, GND, +5 V and more.</span></li>
+   <li><span class="ja"><b>+5V を出す：</b>COM を +5V にすると、ランプやリモコンに +5V を出せます（合計 5A まで）。</span><span class="en"><b>+5 V out:</b> with COM set to +5 V, the unit can power lamps and remote panels (up to 5 A in total).</span></li>
+   <li><span class="ja"><b>本体の上でスクリプトを動かす：</b>Arduino と同じ書き方のプログラムを設定ページで書き、本体で実行できます。</span><span class="en"><b>Scripts on the unit:</b> write Arduino-style programs on the settings page and run them on the unit.</span></li>
+   <li><span class="ja"><b>汎用 GPIO として使う：</b>タリー以外の接点の中継にも使えます（「使い方」で切り替え）。</span><span class="en"><b>General-purpose GPIO:</b> it can also relay contacts that have nothing to do with tally (switch with "Use").</span></li>
+  </ul>
+ </section>
+ <section class="sec" id="parts">
+  <h2><span class="ja">各部の名前</span><span class="en">Parts</span> <span class="sub">PARTS</span></h2>
+  <p class="ja mp">前面には状態 LED、背面にはすべての端子、中の基板にはボタンが 3 つあります。</p><p class="en mp">The status LED is on the front, all connectors are on the rear, and there are three buttons on the board inside.</p>
+  <h3 class="mh3"><span class="ja">前面</span><span class="en">Front</span></h3>
+  <ul class="ml">
+   <li><span class="ja"><b>状態 LED（ロゴの左の小さな穴）：</b>本体の状態を色で示します（下の表）。</span><span class="en"><b>Status LED (the small hole left of the logo):</b> shows the state of the unit by colour (table below).</span></li>
+   <li><span class="ja">初期の台には OLED 画面が付いています。名前・ファームのバージョン・IP アドレス・エラーを表示します。</span><span class="en">Early units have an OLED screen. It shows the name, firmware version, IP address and errors.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">背面</span><span class="en">Rear</span></h3>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">端子</span><span class="en">Connector</span></th><th><span class="ja">使い方</span><span class="en">Use</span></th></tr></thead><tbody>
+<tr><td><span class="ja">DB25（メス）</span><span class="en">DB25 (female)</span></td><td><span class="ja">GPI / GPO。市販の DB25-XLR（キャノン）ケーブルとピン番を合わせてあります</span><span class="en">GPI / GPO. Pin numbering matches off-the-shelf DB25-XLR cables</span></td></tr>
+<tr><td><span class="ja">LAN（RJ45）</span><span class="en">LAN (RJ45)</span></td><td><span class="ja">タリーの送受信と設定ページ</span><span class="en">Tally in / out and the settings page</span></td></tr>
+<tr><td><span class="ja">USB-C</span><span class="en">USB-C</span></td><td><span class="ja">ファームの書き込み</span><span class="en">Flashing firmware</span></td></tr>
+<tr><td><span class="ja">microSD</span><span class="en">microSD</span></td><td><span class="ja">設定ファイル・プリセット・ファーム更新用（なくても動きます）</span><span class="en">Settings file, presets and firmware updates (optional)</span></td></tr>
+<tr><td><span class="ja">DC 入力</span><span class="en">DC in</span></td><td><span class="ja">電源。横の穴は DC ケーブルを留めるクランプ用</span><span class="en">Power. The hole next to it is for a clamp that holds the DC cable</span></td></tr>
+</tbody></table></div>
+  <h3 class="mh3"><span class="ja">中のボタン（上フタを外して操作します）</span><span class="en">Buttons inside (remove the top cover)</span></h3>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">ボタン</span><span class="en">Button</span></th><th><span class="ja">名前</span><span class="en">Name</span></th><th><span class="ja">使い方</span><span class="en">Use</span></th></tr></thead><tbody>
+<tr><td><span class="ja">SW1</span><span class="en">SW1</span></td><td><span class="ja">EN</span><span class="en">EN</span></td><td><span class="ja">押すと再起動します</span><span class="en">Press to restart</span></td></tr>
+<tr><td><span class="ja">SW2</span><span class="en">SW2</span></td><td><span class="ja">BOOT</span><span class="en">BOOT</span></td><td><span class="ja">押したまま SW1 を押して離すと、USB の書き込みモードになります</span><span class="en">Hold it, press and release SW1: USB flashing mode</span></td></tr>
+<tr><td><span class="ja">SW3</span><span class="en">SW3</span></td><td><span class="ja">USER</span><span class="en">USER</span></td><td><span class="ja">押したまま電源を入れて 3 秒で、IP が工場出荷値に戻ります。3 秒たたずに離すと、スクリプトを動かさずに起動します</span><span class="en">Hold it while powering on: after 3 s the IP returns to the factory value. Release before 3 s to start without running the script</span></td></tr>
+</tbody></table></div>
+  <h3 class="mh3"><span class="ja">状態 LED の色</span><span class="en">Status LED colours</span></h3>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">色</span><span class="en">Colour</span></th><th><span class="ja">意味</span><span class="en">Meaning</span></th></tr></thead><tbody>
+<tr><td><span class="ja">緑</span><span class="en">Green</span></td><td><span class="ja">正常（入力元とつながっている）</span><span class="en">Normal (connected to the source)</span></td></tr>
+<tr><td><span class="ja">赤</span><span class="en">Red</span></td><td><span class="ja">どれかのカメラが PGM（オンエア）</span><span class="en">A camera is on PGM (on air)</span></td></tr>
+<tr><td><span class="ja">オレンジ</span><span class="en">Orange</span></td><td><span class="ja">タリーの入力元とつながっていない</span><span class="en">Not connected to the tally source</span></td></tr>
+<tr><td><span class="ja">赤の点滅</span><span class="en">Blinking red</span></td><td><span class="ja">LAN ケーブルがつながっていない</span><span class="en">No LAN cable</span></td></tr>
+<tr><td><span class="ja">紫の点滅</span><span class="en">Blinking purple</span></td><td><span class="ja">ファームを更新中</span><span class="en">Updating firmware</span></td></tr>
+<tr><td><span class="ja">青</span><span class="en">Blue</span></td><td><span class="ja">起動中</span><span class="en">Starting up</span></td></tr>
+<tr><td><span class="ja">青の点滅 → 白</span><span class="en">Blinking blue → white</span></td><td><span class="ja">電源を入れるときに SW3 を押している（白 = IP を工場出荷値に戻した）</span><span class="en">SW3 held at power-on (white = IP set back to the factory value)</span></td></tr>
+</tbody></table></div>
+ </section>
+ <section class="sec" id="connect">
+  <h2><span class="ja">接続</span><span class="en">Connecting</span> <span class="sub">CONNECTING</span></h2>
+  <p class="ja mp">電源は DC から入れ、LAN と DB25 をつなぐだけで使えます。</p><p class="en mp">Power it from DC and connect LAN and DB25 — that is all.</p>
+  <h3 class="mh3"><span class="ja">電源</span><span class="en">Power</span></h3>
+  <ul class="ml">
+   <li><span class="ja">普段は DC 入力（DC 9〜24V、最大 36W）から入れます。+5V を出す使い方も DC が前提です。</span><span class="en">Normally power it from the DC input (DC 9–24 V, 36 W max). The +5 V output also needs DC power.</span></li>
+   <li><span class="ja">USB-C はファームの書き込み用です。</span><span class="en">USB-C is for flashing firmware.</span></li>
+   <li><span class="ja">電源を入れると、状態 LED が青になり、数秒で緑かオレンジに変わります。</span><span class="en">At power-on the status LED turns blue, then green or orange after a few seconds.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">LAN</span><span class="en">LAN</span></h3>
+  <ul class="ml">
+   <li><span class="ja">スイッチャーや PC と同じネットワークにつなぎます（10/100 Mbps）。</span><span class="en">Connect it to the same network as the switcher and PC (10/100 Mbps).</span></li>
+   <li><span class="ja">LAN がつながっていないと、状態 LED が赤で点滅します。</span><span class="en">With no LAN link, the status LED blinks red.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">DB25</span><span class="en">DB25</span></h3>
+  <ul class="ml">
+   <li><span class="ja">市販のアナログオーディオ用 DB25-XLR ケーブル（TASCAM 配列）がそのまま使えます。</span><span class="en">Off-the-shelf analog audio DB25-XLR cables (TASCAM pinout) work as they are.</span></li>
+   <li><span class="ja">工場出荷の割り当てでは、XLR の 1〜8 番が CAM 1〜8 になります。</span><span class="en">With the factory assignment, XLR 1–8 are CAM 1–8.</span></li>
+  </ul>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">XLR のピン</span><span class="en">XLR pin</span></th><th><span class="ja">割り当て</span><span class="en">Assignment</span></th></tr></thead><tbody>
+<tr><td><span class="ja">1</span><span class="en">1</span></td><td><span class="ja">COM</span><span class="en">COM</span></td></tr>
+<tr><td><span class="ja">2</span><span class="en">2</span></td><td><span class="ja">PGM（赤）</span><span class="en">PGM (red)</span></td></tr>
+<tr><td><span class="ja">3</span><span class="en">3</span></td><td><span class="ja">PVW（緑）</span><span class="en">PVW (green)</span></td></tr>
+</tbody></table></div>
+  <ul class="ml">
+   <li><span class="ja">工場出荷では全部 GPI（入力）です。タリーを点ける側（GPO）で使うときは、「ピン割り当て」で内蔵プリセットを「GPO として読み込む」にします。</span><span class="en">From the factory they are all GPI (inputs). To drive tally lamps (GPO), load the built-in preset with "Load as GPO" on the pins page.</span></li>
+   <li><span class="ja">インカムなど、電圧が乗っているラインにはつながないでください。</span><span class="en">Do not connect lines that carry voltage, such as intercom lines.</span></li>
+  </ul>
+ </section>
+ <section class="sec" id="start">
+  <h2><span class="ja">はじめて使う</span><span class="en">Getting started</span> <span class="sub">FIRST USE</span></h2>
+  <p class="ja mp">工場出荷の IP は 192.168.10.90（固定）です。PC を同じネットワークにして、ブラウザで開きます。</p><p class="en mp">The factory IP is 192.168.10.90 (fixed). Put your PC on the same network and open it in a browser.</p>
+  <ol class="ml">
+   <li><span class="ja">KISS-1 と PC を LAN でつなぎ、KISS-1 の電源を入れます。</span><span class="en">Connect KISS-1 and the PC by LAN and power on KISS-1.</span></li>
+   <li><span class="ja">PC の IP を 192.168.10.x（.90 以外、例：192.168.10.10）、サブネットマスクを 255.255.255.0 にします。</span><span class="en">Set the PC to 192.168.10.x (not .90, e.g. 192.168.10.10) with subnet mask 255.255.255.0.</span></li>
+   <li><span class="ja">ブラウザで http://192.168.10.90 を開きます。</span><span class="en">Open http://192.168.10.90 in a browser.</span></li>
+   <li><span class="ja">「設定と状態」のページが出たら、使う現場に合わせて「ネットワーク」の IP を変えます。変えた IP は再起動すると切り替わります。</span><span class="en">On the "Settings and status" page, change the IP under "Network" to suit the site. A new IP takes effect after a restart.</span></li>
+   <li><span class="ja">「タリーの入力元」と「ピン割り当て」を設定して、「保存して反映」を押します。</span><span class="en">Set the tally source and the pin assignment, then press "Save and apply".</span></li>
+  </ol>
+  <p class="ja mp">ページは 3 つあり、上のメニューで切り替えます。</p><p class="en mp">There are three pages; switch between them with the menu at the top.</p>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">ページ</span><span class="en">Page</span></th><th><span class="ja">中身</span><span class="en">Contents</span></th></tr></thead><tbody>
+<tr><td><span class="ja">設定と状態</span><span class="en">Settings and status</span></td><td><span class="ja">タリーの表示、入力元、TSL 送信、ネットワーク、プリセット、ファーム更新など</span><span class="en">Tally view, source, TSL out, network, presets, firmware update and more</span></td></tr>
+<tr><td><span class="ja">ピン割り当て</span><span class="en">Pins</span></td><td><span class="ja">DB25 の各ピンの使い方、COM のつなぎ先、セルフテスト</span><span class="en">What each DB25 pin does, where COM goes, self test</span></td></tr>
+<tr><td><span class="ja">スクリプト</span><span class="en">Script</span></td><td><span class="ja">本体で動かすプログラムとコンソール</span><span class="en">Programs that run on the unit, and the console</span></td></tr>
+</tbody></table></div>
+  <p class="ja mp">ページの言語は、日本語・英語・スペイン語・中国語・韓国語から選べます。</p><p class="en mp">The page language can be Japanese, English, Spanish, Chinese or Korean.</p>
+  <h3 class="mh3"><span class="ja">工場出荷の設定</span><span class="en">Factory settings</span></h3>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">項目</span><span class="en">Item</span></th><th><span class="ja">初期値</span><span class="en">Default</span></th></tr></thead><tbody>
+<tr><td><span class="ja">IP / マスク / ゲートウェイ</span><span class="en">IP / mask / gateway</span></td><td><span class="ja">192.168.10.90 / 255.255.255.0 / 192.168.10.1（DHCP なし）</span><span class="en">192.168.10.90 / 255.255.255.0 / 192.168.10.1 (no DHCP)</span></td></tr>
+<tr><td><span class="ja">タリーの入力元</span><span class="en">Tally source</span></td><td><span class="ja">TSL 5.0 受信（UDP、ポート 8900、CAM1 = INDEX 0）</span><span class="en">TSL 5.0 in (UDP, port 8900, CAM1 = INDEX 0)</span></td></tr>
+<tr><td><span class="ja">カメラ台数</span><span class="en">Cameras</span></td><td><span class="ja">8</span><span class="en">8</span></td></tr>
+<tr><td><span class="ja">TSL 5.0 送信</span><span class="en">TSL 5.0 out</span></td><td><span class="ja">オン（192.168.10.91:8900 へ UDP、1000 ms ごと）</span><span class="en">On (UDP to 192.168.10.91:8900, every 1000 ms)</span></td></tr>
+<tr><td><span class="ja">ピン割り当て</span><span class="en">Pins</span></td><td><span class="ja">TASCAM 配列の GPI、COM は絶縁 0V</span><span class="en">TASCAM layout as GPI, COM isolated 0 V</span></td></tr>
+</tbody></table></div>
+ </section>
+ <section class="sec" id="settings">
+  <h2><span class="ja">設定ページ（設定と状態）</span><span class="en">Settings page (Settings and status)</span> <span class="sub">SETTINGS</span></h2>
+  <p class="ja mp">変えたら「保存して反映」を押すと、すぐに切り替わります。ネットワークだけは再起動で切り替わります。</p><p class="en mp">Changes take effect as soon as you press "Save and apply". Only the network settings need a restart.</p>
+  <h3 class="mh3"><span class="ja">タリーと状態</span><span class="en">Tally and status</span></h3>
+  <ul class="ml">
+   <li><span class="ja">ページの上に、各カメラのタリー（赤・緑）が表示されます。</span><span class="en">The tally of each camera (red / green) is shown at the top of the page.</span></li>
+   <li><span class="ja">「状態」には、入力元・TSL 受信・TSL 送信・I/O 基板・電源・設定の読み込み元・稼働時間とファームのバージョンが出ます。</span><span class="en">"Status" shows the source, TSL in, TSL out, I/O board, power, where the settings were loaded from, uptime and firmware version.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">使い方とタリーの色</span><span class="en">Use and tally colour</span></h3>
+  <ul class="ml">
+   <li><span class="ja">「使い方」：「タリー」はカメラ番号と赤・緑で、「汎用 GPIO」は信号番号で表示します。中の動きは同じです。</span><span class="en">"Use": "Tally" shows camera numbers in red and green, "General GPIO" shows signal numbers. Inside it works the same.</span></li>
+   <li><span class="ja">「タリーの色」：「RED + GREEN」か「RED のみ」。RED のみにすると PVW（緑）は使わず、GPO・TSL 送信もすべて赤だけになります（内蔵プリセット「連番 24ch（RED のみ）」と組み合わせると 24 カメラまで）。</span><span class="en">"Tally colour": "RED + GREEN" or "RED only". With RED only, PVW (green) is not used and GPOs and TSL out are red only (up to 24 cameras with the built-in preset "Sequential 24ch (RED only)").</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">タリーの入力元</span><span class="en">Tally source</span></h3>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">入力元</span><span class="en">Source</span></th><th><span class="ja">設定するもの</span><span class="en">Settings</span></th></tr></thead><tbody>
+<tr><td><span class="ja">ATEM</span><span class="en">ATEM</span></td><td><span class="ja">ATEM スイッチャーの IP</span><span class="en">IP of the ATEM switcher</span></td></tr>
+<tr><td><span class="ja">TSL 5.0 受信</span><span class="en">TSL 5.0 in</span></td><td><span class="ja">UDP / TCP（こちらで待ち受け）/ TCP（こちらから接続）、ポート、CAM1 にする TSL の番号（INDEX）、SCREEN、途切れたら消灯するまでの秒数、受信するランプ（RH・TEXT・LH）。UDP はマルチキャストも受けられます</span><span class="en">UDP / TCP (listen) / TCP (connect), port, the TSL number used as CAM1 (INDEX), SCREEN, seconds before lamps go off when the feed stops, lamps to read (RH, TEXT, LH). UDP can also receive multicast</span></td></tr>
+<tr><td><span class="ja">なし（GPI だけ）</span><span class="en">None (GPI only)</span></td><td><span class="ja">ネットワークからは受けず、DB25 の GPI だけを使います</span><span class="en">Nothing from the network; only the DB25 GPIs</span></td></tr>
+</tbody></table></div>
+  <ul class="ml">
+   <li><span class="ja">どの入力元でも、DB25 の GPI ピンはいつも有効です。GPI で受けたタリーは入力元のタリーに重ねて使われます。</span><span class="en">DB25 GPI pins are always active, whatever the source. Tally from GPIs is combined with the tally from the source.</span></li>
+   <li><span class="ja">「カメラ台数」は 1〜40 です。</span><span class="en">"Cameras" is 1 to 40.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">TSL 5.0 送信</span><span class="en">TSL 5.0 out</span></h3>
+  <p class="ja mp">受けたタリー（GPI を含む）を TSL 5.0 で送ります。LORA-TALLY 親機や、もう 1 台の KISS-1 へつなぐときに使います。</p><p class="en mp">Sends the tally it has (GPIs included) as TSL 5.0. Use it to feed a LORA-TALLY base unit or another KISS-1.</p>
+  <ul class="ml">
+   <li><span class="ja">送り方：UDP / TCP（こちらから接続）/ TCP（こちらで待ち受け）。</span><span class="en">Transport: UDP / TCP (connect) / TCP (listen).</span></li>
+   <li><span class="ja">UDP の送り先：「1 台に送る」「全体に送る」（255.255.255.255）「マルチキャスト」（迷ったら 239.1.1.1）。</span><span class="en">UDP destination: "One unit", "Broadcast" (255.255.255.255) or "Multicast" (239.1.1.1 if unsure).</span></li>
+   <li><span class="ja">「くり返し送信 ms」：変化がなくてもこの間隔で送り直します（50〜60000）。0 にすると変化したときだけ送ります。</span><span class="en">"Resend ms": resends at this interval even without changes (50–60000). 0 sends only on a change.</span></li>
+   <li><span class="ja">CAM1 の TSL 番号（INDEX）、SCREEN、点けるランプ（RH・TEXT・LH）を相手に合わせます。</span><span class="en">Match the TSL number for CAM1 (INDEX), SCREEN and the lamps (RH, TEXT, LH) to the receiver.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">ネットワーク</span><span class="en">Network</span></h3>
+  <ul class="ml">
+   <li><span class="ja">IP アドレス・サブネットマスク・ゲートウェイ。「DHCP で自動取得する」も選べます。</span><span class="en">IP address, subnet mask and gateway. "Get automatically by DHCP" is also available.</span></li>
+   <li><span class="ja">「保存して反映」のあと、「再起動して切り替える」で切り替わります。再起動中の数秒間は、GPO がすべて OFF になり、タリーも止まります。</span><span class="en">After "Save and apply", press "Restart to switch". For a few seconds while it restarts, all GPOs are off and tally stops.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">設定のプリセット</span><span class="en">Settings presets</span></h3>
+  <ul class="ml">
+   <li><span class="ja">今の設定（入力元・TSL・使い方・ピン割り当てなど）に名前を付けて保存します。</span><span class="en">Save the current settings (source, TSL, use, pin assignment and more) under a name.</span></li>
+   <li><span class="ja">保存先：本体に 8 個、microSD に何個でも、PC にファイルで。</span><span class="en">Where: 8 in the unit, any number on the microSD, or as a file on the PC.</span></li>
+   <li><span class="ja">KISS-1 自身の IP などのネットワーク設定は含みません。そのため、別の台に読み込んでも IP は変わりません。ATEM や TSL の送り先など「相手の IP」は含みます。</span><span class="en">Presets do not include the unit's own network settings, so loading one on another unit never changes its IP. The IPs of other gear (ATEM, TSL destination and so on) are included.</span></li>
+   <li><span class="ja">先に「保存して反映」を押してから保存してください。読み込むと、その場で反映されます。</span><span class="en">Press "Save and apply" before saving a preset. Loading a preset applies it immediately.</span></li>
+   <li><span class="ja">「今の設定ファイルをダウンロード」で、ネットワークも含む全部の設定（kiss1.txt）を PC に保存できます。</span><span class="en">"Download the current settings file" saves all settings, network included (kiss1.txt), to the PC.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">工場出荷に戻す</span><span class="en">Factory reset</span></h3>
+  <ul class="ml">
+   <li><span class="ja">1 回押すと「本当に戻す？」に変わり、4 秒以内にもう一度押すと実行します。</span><span class="en">Press once and it asks "Really reset?"; press again within 4 seconds to do it.</span></li>
+   <li><span class="ja">本体に保存した設定（ネットワークを含む）・設定とピンのプリセット・スクリプトを消して再起動し、192.168.10.90 で立ち上がります。</span><span class="en">It erases the settings stored in the unit (network included), the settings and pin presets and the script, then restarts at 192.168.10.90.</span></li>
+   <li><span class="ja">microSD の中身は消しません。kiss1.txt は kiss1_old.txt に名前を変えて残します。</span><span class="en">The microSD is not erased; kiss1.txt is renamed to kiss1_old.txt.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">ファームの更新</span><span class="en">Firmware update</span></h3>
+  <ul class="ml">
+   <li><span class="ja">本体だけの .bin（例：KISS1_FW.ino.bin）を選んで「アップデート」を押します。merged.bin は使えません。</span><span class="en">Choose the application-only .bin (e.g. KISS1_FW.ino.bin) and press "Update". merged.bin cannot be used.</span></li>
+   <li><span class="ja">設定は残ります。更新中はタリーと GPO が止まり、状態 LED が紫で点滅します。</span><span class="en">Settings are kept. During the update, tally and GPOs stop and the status LED blinks purple.</span></li>
+   <li><span class="ja">失敗したときは、今のファームのまま動き続けます。</span><span class="en">If it fails, the unit keeps running the current firmware.</span></li>
+  </ul>
+ </section>
+ <section class="sec" id="pins">
+  <h2><span class="ja">ピンの設定（ピン割り当て）</span><span class="en">Pin setup (Pins page)</span> <span class="sub">PINS</span></h2>
+  <p class="ja mp">DB25 の 25 本のピンに、使い方とカメラ番号・色を 1 本ずつ割り当てます。変えたら「保存して反映」で切り替わります。</p><p class="en mp">Give each of the 25 DB25 pins a role, a camera number and a colour. Changes take effect with "Save and apply".</p>
+  <p class="ja mp">ページの上の DB25 の絵は背面から見た向きです。ピンを押すと、下の表のその行に移ります。「状態」の欄には、今のピンの状態がタリーの色で出ます。</p><p class="en mp">The DB25 drawing at the top is seen from the rear. Click a pin to jump to its row in the table. The "State" column shows the current state of each pin in tally colour.</p>
+  <h3 class="mh3"><span class="ja">ピンの使い方</span><span class="en">Pin roles</span></h3>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">使い方</span><span class="en">Role</span></th><th><span class="ja">動き</span><span class="en">What it does</span></th></tr></thead><tbody>
+<tr><td><span class="ja">GPI</span><span class="en">GPI</span></td><td><span class="ja">入力。COM（または GND）のピンとの間が閉じると、そのカメラ・色のタリーが点きます</span><span class="en">Input. Closing it to a COM (or GND) pin lights that camera and colour</span></td></tr>
+<tr><td><span class="ja">GPO</span><span class="en">GPO</span></td><td><span class="ja">出力。タリーが点いている間、そのピンと COM の間が閉じます</span><span class="en">Output. Closes the pin to COM while the tally is on</span></td></tr>
+<tr><td><span class="ja">GND GPO</span><span class="en">GND GPO</span></td><td><span class="ja">出力。オンのときピンを本体の GND に落とします（外部電源の LED やリレーを引き込む使い方）</span><span class="en">Output. Pulls the pin to the unit's GND when on (to sink LEDs or relays powered from outside)</span></td></tr>
+<tr><td><span class="ja">COM</span><span class="en">COM</span></td><td><span class="ja">共通端子。つなぎ先は下の「COM のつなぎ先」で決めます</span><span class="en">Common. Where it goes is set under "COM connection" below</span></td></tr>
+<tr><td><span class="ja">GND</span><span class="en">GND</span></td><td><span class="ja">いつも本体の GND</span><span class="en">Always the unit's GND</span></td></tr>
+<tr><td><span class="ja">SCRIPT</span><span class="en">SCRIPT</span></td><td><span class="ja">スクリプトからオン・オフします（X = GPO、XG = GND GPO）</span><span class="en">Switched by the script (X = GPO, XG = GND GPO)</span></td></tr>
+<tr><td><span class="ja">未使用</span><span class="en">Unused</span></td><td><span class="ja">どこにもつながりません</span><span class="en">Not connected</span></td></tr>
+</tbody></table></div>
+  <h3 class="mh3"><span class="ja">COM のつなぎ先</span><span class="en">COM connection</span></h3>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">つなぎ先</span><span class="en">Connection</span></th><th><span class="ja">向いている使い方</span><span class="en">Best for</span></th></tr></thead><tbody>
+<tr><td><span class="ja">絶縁 0V</span><span class="en">Isolated 0 V</span></td><td><span class="ja">GPI も GPO も使えます。ふつうはこれ</span><span class="en">Both GPI and GPO work. The usual choice</span></td></tr>
+<tr><td><span class="ja">本体の GND</span><span class="en">Unit GND</span></td><td><span class="ja">COM が GND でないと受けられない機器向け。GPI を使うと絶縁がなくなります</span><span class="en">For gear that needs COM at GND. With GPIs, isolation is lost</span></td></tr>
+<tr><td><span class="ja">ドライ接点</span><span class="en">Dry contact</span></td><td><span class="ja">COM はどこにもつながず、GPO と COM の間が無電圧接点になります。GPI は使えません</span><span class="en">COM is not connected anywhere; GPO to COM is a voltage-free contact. GPIs cannot be used</span></td></tr>
+<tr><td><span class="ja">+5V</span><span class="en">+5V</span></td><td><span class="ja">COM のピンが +5V になります（合計最大 5A）。GPO は「+5V GPO」になり、オンで +5V、オフで GND に落ちます。つないだ機器の GND は「GND」のピンへ戻します</span><span class="en">COM pins carry +5 V (5 A max in total). GPOs become "+5 V GPO": +5 V when on, pulled to GND when off. Return the connected gear's GND to a "GND" pin</span></td></tr>
+</tbody></table></div>
+  <ul class="ml">
+   <li><span class="ja">「GPI を反転する」：常時閉（NC）の接点を受けるときに使います。</span><span class="en">"Invert GPI": for normally closed (NC) contacts.</span></li>
+   <li><span class="ja">割り当てに問題があると、表の上に注意が出ます（COM のピンがない、ドライ接点で GPI を使っている、など）。</span><span class="en">If something is wrong with the assignment, a warning appears above the table (no COM pin, GPIs with dry contact and so on).</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">COM を +5V にするときの安全策</span><span class="en">Safety when COM goes to +5 V</span></h3>
+  <p class="ja mp">COM を +5V に切り替えると、今 COM になっているピンはいったんすべて GND に変わります。COM につないであった機器に、いきなり +5V がかからないようにするためです。</p><p class="en mp">When COM is switched to +5 V, every pin that is currently COM turns into GND first, so gear wired to COM never suddenly gets +5 V.</p>
+  <ul class="ml">
+   <li><span class="ja">+5V を出したいピンは、そのあと自分で「+5V」に選び直します。</span><span class="en">Then choose "+5V" again yourself for the pins that should carry +5 V.</span></li>
+   <li><span class="ja">ピンのプリセット・設定のプリセット・microSD の kiss1.txt で +5V に切り替わる場合も、同じように GND に変わります。</span><span class="en">The same happens when a pin preset, a settings preset or kiss1.txt on the microSD switches COM to +5 V.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">使い方の例：スイッチャーの KEY リモコン（XLR 3 ピン）</span><span class="en">Example: a switcher KEY remote (3-pin XLR)</span></h3>
+  <p class="ja mp">COM を +5V にして、1 本の XLR にボタンとランプをまとめます。</p><p class="en mp">Set COM to +5 V and put a button and a lamp on one XLR.</p>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">XLR のピン</span><span class="en">XLR pin</span></th><th><span class="ja">割り当て</span><span class="en">Assignment</span></th><th><span class="ja">つなぐもの</span><span class="en">Wire to</span></th></tr></thead><tbody>
+<tr><td><span class="ja">1</span><span class="en">1</span></td><td><span class="ja">GND</span><span class="en">GND</span></td><td><span class="ja">ボタンとランプの共通</span><span class="en">Common of the button and lamp</span></td></tr>
+<tr><td><span class="ja">2</span><span class="en">2</span></td><td><span class="ja">GPI</span><span class="en">GPI</span></td><td><span class="ja">ボタン</span><span class="en">Button</span></td></tr>
+<tr><td><span class="ja">3</span><span class="en">3</span></td><td><span class="ja">+5V GPO</span><span class="en">+5V GPO</span></td><td><span class="ja">ランプ（LED なら 220〜330Ω を直列に）</span><span class="en">Lamp (with an LED, a 220–330 Ω resistor in series)</span></td></tr>
+</tbody></table></div>
+  <h3 class="mh3"><span class="ja">プリセット</span><span class="en">Presets</span></h3>
+  <ul class="ml">
+   <li><span class="ja">内蔵：アナログオーディオケーブル（TASCAM DB25-XLR）、Hollyland ワイヤレスタリー、連番 24ch（RED のみ）、連番 12ch（RED + GREEN）。それぞれ「GPI として」「GPO として」読み込めます。</span><span class="en">Built in: analog audio cable (TASCAM DB25-XLR), Hollyland wireless tally, sequential 24ch (RED only), sequential 12ch (RED + GREEN). Each can be loaded "as GPI" or "as GPO".</span></li>
+   <li><span class="ja">保存したもの：今の割り当てに名前を付けて 8 個まで保存できます。</span><span class="en">Saved: up to 8 of your own assignments, by name.</span></li>
+   <li><span class="ja">読み込んだだけでは反映されません。「保存して反映」で切り替わります。</span><span class="en">Loading alone does not apply it; press "Save and apply".</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">セルフテスト</span><span class="en">Self test</span></h3>
+  <p class="ja mp">DB25 のケーブルを外して「セルフテストを実行」を押すと、約 3 秒で全ピンの出力と入力、+5V、LAN、microSD、DC 入力電圧を調べます。テスト中は全ピンを順に COM・GND・+5V へつなぐので、必ずケーブルを外してから実行してください。</p><p class="en mp">Unplug the DB25 cable and press "Run self test": in about 3 seconds it checks the outputs and inputs of every pin, +5 V, LAN, microSD and the DC input voltage. During the test every pin is connected in turn to COM, GND and +5 V, so always unplug the cable first.</p>
+ </section>
+ <section class="sec" id="script">
+  <h2><span class="ja">スクリプト</span><span class="en">Scripts</span> <span class="sub">SCRIPT</span></h2>
+  <p class="ja mp">Arduino と同じ書き方（setup() と loop()）のプログラムを、「スクリプト」のページで書いて本体の上で動かせます。PC でのコンパイルやファームの書き込みはいりません。</p><p class="en mp">Write a program the Arduino way (setup() and loop()) on the Script page and run it on the unit. No compiling on a PC and no firmware flashing.</p>
+  <h3 class="mh3"><span class="ja">使い方</span><span class="en">How to use</span></h3>
+  <ol class="ml">
+   <li><span class="ja">「ピン割り当て」で、スクリプトから動かしたいピンを SCRIPT にします。</span><span class="en">On the Pins page, set the pins the script should drive to SCRIPT.</span></li>
+   <li><span class="ja">「例を入れる…」から近い例を選ぶか、自分で書きます。</span><span class="en">Pick a close example from "Insert example…" or write your own.</span></li>
+   <li><span class="ja">「検証」で書き方を確かめ、「保存して実行」で動かします。「停止」で止めます。</span><span class="en">"Check" verifies the code, "Save and run" runs it, "Stop" stops it.</span></li>
+   <li><span class="ja">「電源を入れたら自動で実行」にチェックすると、起動のたびに動きます。</span><span class="en">Tick "Run automatically at power-on" to run it every time the unit starts.</span></li>
+  </ol>
+  <ul class="ml">
+   <li><span class="ja">Tab で字下げ、Ctrl+S で保存、Ctrl+Enter で保存して実行。「PC から開く」「PC に保存」でファイルにもできます。</span><span class="en">Tab indents, Ctrl+S saves, Ctrl+Enter saves and runs. "Open from PC" and "Save to PC" work with files.</span></li>
+   <li><span class="ja">長さは 16KB まで。計算はすべて 32 ビットの整数で、float・String・ポインタは使えません。</span><span class="en">Up to 16 KB. All maths is 32-bit integer; float, String and pointers are not available.</span></li>
+   <li><span class="ja">停止したときやエラーのときは、SCRIPT のピンはすべてオフになり、タリーの上書きも解除されます。</span><span class="en">When the script stops or hits an error, all SCRIPT pins turn off and tally overrides are released.</span></li>
+   <li><span class="ja">電源を入れるときに SW3（USER）を押していると、自動実行しません。スクリプトのせいでおかしくなったときに使います。</span><span class="en">Holding SW3 (USER) at power-on skips the automatic run — use it if a script has made things go wrong.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">主な関数（全部の一覧はページの「使える関数」にあります）</span><span class="en">Main functions (the full list is under "Functions" on the page)</span></h3>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">関数</span><span class="en">Function</span></th><th><span class="ja">内容</span><span class="en">What it does</span></th></tr></thead><tbody>
+<tr><td><span class="ja">digitalRead(pin)</span><span class="en">digitalRead(pin)</span></td><td><span class="ja">ピン 1〜25 の入力。接点が閉じていると 1</span><span class="en">Input of pin 1–25. 1 when the contact is closed</span></td></tr>
+<tr><td><span class="ja">digitalWrite(pin, HIGH / LOW)</span><span class="en">digitalWrite(pin, HIGH / LOW)</span></td><td><span class="ja">SCRIPT のピンをオン・オフ。HIGH = オン（電圧の意味ではありません）</span><span class="en">Turns a SCRIPT pin on / off. HIGH = on (not a voltage)</span></td></tr>
+<tr><td><span class="ja">delay(ms)、millis()</span><span class="en">delay(ms), millis()</span></td><td><span class="ja">待つ、起動からの時間</span><span class="en">Wait; time since start-up</span></td></tr>
+<tr><td><span class="ja">tally(cam)、pgm(cam)、pvw(cam)</span><span class="en">tally(cam), pgm(cam), pvw(cam)</span></td><td><span class="ja">入力元のタリーを調べる</span><span class="en">Read the tally from the source</span></td></tr>
+<tr><td><span class="ja">setTally(cam, PGM / PVW / 0)、releaseTally()</span><span class="en">setTally(cam, PGM / PVW / 0), releaseTally()</span></td><td><span class="ja">タリーを上書きする・やめる。GPO・TSL 送信・画面すべてに反映</span><span class="en">Override tally / stop overriding. Applies to GPOs, TSL out and the screens</span></td></tr>
+<tr><td><span class="ja">Serial.print(x)、Serial.readLine()</span><span class="en">Serial.print(x), Serial.readLine()</span></td><td><span class="ja">コンソールへ表示、コンソールから 1 行受け取る</span><span class="en">Print to the console; read a line from the console</span></td></tr>
+<tr><td><span class="ja">udpSend、tcpConnect、httpGet、oscSend</span><span class="en">udpSend, tcpConnect, httpGet, oscSend</span></td><td><span class="ja">LAN で他の機器とやり取り（UDP・TCP・HTTP・OSC）</span><span class="en">Talk to other gear over LAN (UDP, TCP, HTTP, OSC)</span></td></tr>
+<tr><td><span class="ja">tslSend(ip, port, index, RED / GREEN / OFF, "TEXT")、tslOut(0 / 1)</span><span class="en">tslSend(ip, port, index, RED / GREEN / OFF, "TEXT"), tslOut(0 / 1)</span></td><td><span class="ja">TSL 5.0 を 1 件送る、本体の TSL 送信を止める・動かす</span><span class="en">Send one TSL 5.0 message; stop / run the unit's own TSL out</span></td></tr>
+</tbody></table></div>
+  <p class="ja mp">LAN の関数は相手を待たずにすぐ戻るので、相手がいなくてもタリーや Web は止まりません。</p><p class="en mp">LAN functions return at once without waiting, so tally and the web page keep running even if the other end is missing.</p>
+  <h3 class="mh3"><span class="ja">例（「例を入れる…」に入っているもの）</span><span class="en">Examples (in "Insert example…")</span></h3>
+  <ul class="ml">
+   <li><span class="ja">GPI のピン 1 で CAM 3 を赤に</span><span class="en">GPI pin 1 turns CAM 3 red</span></li>
+   <li><span class="ja">どれかが ON AIR ならピン 15</span><span class="en">Pin 15 while anything is on air</span></li>
+   <li><span class="ja">GPI の変化を OSC で送る</span><span class="en">Send GPI changes as OSC</span></li>
+   <li><span class="ja">DB25 ケーブルチェック（2 台で、送る側 A と受ける側 B）</span><span class="en">DB25 cable check (two units: sender A and receiver B)</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">コンソール</span><span class="en">Console</span></h3>
+  <ul class="ml">
+   <li><span class="ja">Serial.print の出力は白、本体のログは灰、自分が入力した文字はピンクで表示されます。</span><span class="en">Serial.print output is white, unit log lines are grey, and what you type is pink.</span></li>
+   <li><span class="ja">下の入力欄に文字を入れて Enter で、スクリプトへ送れます（Serial.readLine() で受け取る）。</span><span class="en">Type in the box at the bottom and press Enter to send it to the script (read it with Serial.readLine()).</span></li>
+  </ul>
+ </section>
+ <section class="sec" id="sd">
+  <h2><span class="ja">microSD</span><span class="en">microSD</span> <span class="sub">MICROSD</span></h2>
+  <p class="ja mp">microSD はなくても動きます。入れておくと、設定の控え・プリセットの保管・ファーム更新に使えます。FAT32 でフォーマットしたカードを使ってください。</p><p class="en mp">The unit works without a microSD. With one, it keeps a copy of the settings, stores presets and can update firmware. Use a card formatted as FAT32.</p>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">ファイル</span><span class="en">File</span></th><th><span class="ja">中身</span><span class="en">Contents</span></th></tr></thead><tbody>
+<tr><td><span class="ja">/kiss1.txt</span><span class="en">/kiss1.txt</span></td><td><span class="ja">今の設定（ネットワークを含む全部）。保存するたびに書き込まれます</span><span class="en">Current settings (all of them, network included). Written on every save</span></td></tr>
+<tr><td><span class="ja">/kiss1_presets/</span><span class="en">/kiss1_presets/</span></td><td><span class="ja">microSD に保存した設定のプリセット</span><span class="en">Settings presets saved to the microSD</span></td></tr>
+<tr><td><span class="ja">/KISS1〜.bin</span><span class="en">/KISS1….bin</span></td><td><span class="ja">ファーム更新用（下を参照）</span><span class="en">For firmware updates (see below)</span></td></tr>
+<tr><td><span class="ja">/kiss1_old.txt</span><span class="en">/kiss1_old.txt</span></td><td><span class="ja">「工場出荷に戻す」で名前を変えた前の kiss1.txt</span><span class="en">The old kiss1.txt renamed by "Factory reset"</span></td></tr>
+</tbody></table></div>
+  <h3 class="mh3"><span class="ja">kiss1.txt</span><span class="en">kiss1.txt</span></h3>
+  <ul class="ml">
+   <li><span class="ja">起動したときに kiss1.txt があると、本体に保存した設定よりそちらが優先されます。設定ページの「設定の読み込み元」で、どちらから読んだかわかります。</span><span class="en">If kiss1.txt is present at start-up, it takes priority over the settings stored in the unit. "Settings loaded from" on the settings page shows which was used.</span></li>
+   <li><span class="ja">テキストファイルなので、PC のメモ帳などで直接書き換えられます。各行に日本語の説明が付いています。</span><span class="en">It is a text file, so you can edit it directly in a text editor. Each line has a Japanese comment.</span></li>
+   <li><span class="ja">同じ kiss1.txt を別の台に入れると、IP も同じになります。複数台を同じ設定にするときは、IP だけ書き換えるか、IP を含まない「設定のプリセット」を使ってください。</span><span class="en">The same kiss1.txt in another unit gives it the same IP too. To set up several units alike, change just the IP or use settings presets, which do not include the IP.</span></li>
+  </ul>
+  <h3 class="mh3"><span class="ja">microSD からのファーム更新</span><span class="en">Firmware update from microSD</span></h3>
+  <ol class="ml">
+   <li><span class="ja">本体だけの .bin を、「KISS1」で始まり「.bin」で終わる名前（例：KISS1_FW.bin）で microSD の直下に置きます。</span><span class="en">Put the application-only .bin in the root of the microSD with a name that starts with "KISS1" and ends with ".bin" (e.g. KISS1_FW.bin).</span></li>
+   <li><span class="ja">microSD を入れて電源を入れると、更新して自動で再起動します。</span><span class="en">Insert the card and power on: the unit updates and restarts by itself.</span></li>
+   <li><span class="ja">終わるとファイル名の後ろに .done が付き、次からは更新しません。</span><span class="en">When done, ".done" is added to the file name so it is not used again.</span></li>
+  </ol>
+  <p class="ja mp">設定は残ります。同じカードを使い回すときは、.done の付いたファイルを元の名前に戻してから次の台に入れます。</p><p class="en mp">Settings are kept. To reuse the card, rename the .done file back before putting it in the next unit.</p>
+ </section>
+ <section class="sec" id="trouble">
+  <h2><span class="ja">困ったとき</span><span class="en">Troubleshooting</span> <span class="sub">TROUBLESHOOTING</span></h2>
+  <p class="ja mp">まず前面の状態 LED の色を見てください。どこで止まっているかがわかります。</p><p class="en mp">First look at the colour of the status LED on the front — it tells you where things stop.</p>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">こんなとき</span><span class="en">Problem</span></th><th><span class="ja">確かめること・やること</span><span class="en">What to check / do</span></th></tr></thead><tbody>
+<tr><td><span class="ja">IP がわからない</span><span class="en">Unknown IP</span></td><td><span class="ja">SW3（USER）を押したまま電源を入れ、LED の青の点滅が白に変わるまで 3 秒押し続けます。IP だけが 192.168.10.90 に戻ります。OLED 付きの台は画面に IP が出ています</span><span class="en">Hold SW3 (USER) while powering on and keep holding for 3 s until the blinking blue LED turns white. Only the IP returns to 192.168.10.90. Units with an OLED show the IP on the screen</span></td></tr>
+<tr><td><span class="ja">設定ページが開かない</span><span class="en">Settings page won't open</span></td><td><span class="ja">PC の IP が同じネットワーク（例 192.168.10.x）か。LED が赤の点滅なら LAN ケーブル。IP を変えたあとは新しい IP で開き直す</span><span class="en">Is the PC on the same network (e.g. 192.168.10.x)? Blinking red LED: check the LAN cable. After changing the IP, open the new IP</span></td></tr>
+<tr><td><span class="ja">LED がオレンジ</span><span class="en">LED is orange</span></td><td><span class="ja">タリーの入力元とつながっていません。ATEM の IP、TSL のポートと送り側の設定を確かめる。設定ページの「状態」に理由が出ます</span><span class="en">Not connected to the tally source. Check the ATEM IP, or the TSL port and the sender's settings. "Status" on the settings page shows why</span></td></tr>
+<tr><td><span class="ja">ランプが点かない</span><span class="en">Lamps don't light</span></td><td><span class="ja">ピン割り当ての注意を見る。COM のつなぎ先が相手の機器に合っているか。カメラ番号が「カメラ台数」より大きくないか。RED のみのときに緑のピンがないか</span><span class="en">Read the warnings on the Pins page. Does the COM connection suit the gear? Is the camera number above "Cameras"? With RED only, are there green pins?</span></td></tr>
+<tr><td><span class="ja">GPI が反応しない</span><span class="en">GPI doesn't respond</span></td><td><span class="ja">COM が「ドライ接点」だと GPI は使えません。常時閉の接点なら「GPI を反転する」</span><span class="en">GPIs don't work with COM on "Dry contact". For normally closed contacts, use "Invert GPI"</span></td></tr>
+<tr><td><span class="ja">ピンや配線を疑うとき</span><span class="en">Suspect a pin or wiring</span></td><td><span class="ja">DB25 を外して「セルフテスト」。ケーブルはスクリプトの「DB25 ケーブルチェック」（2 台）で調べられます</span><span class="en">Unplug the DB25 and run the self test. Cables can be checked with the "DB25 cable check" script (two units)</span></td></tr>
+<tr><td><span class="ja">スクリプトでおかしくなった</span><span class="en">A script broke things</span></td><td><span class="ja">SW3 を押したまま電源を入れ、3 秒たたずに離すと、スクリプトを動かさずに起動します</span><span class="en">Hold SW3 at power-on and release before 3 s: the unit starts without running the script</span></td></tr>
+<tr><td><span class="ja">設定を全部やり直したい</span><span class="en">Start over</span></td><td><span class="ja">設定ページの「工場出荷に戻す」。microSD に kiss1.txt があるとそちらが優先されるので、カードも確かめる</span><span class="en">"Factory reset" on the settings page. kiss1.txt on the microSD takes priority, so check the card too</span></td></tr>
+<tr><td><span class="ja">起動しない・ファームを入れ直したい</span><span class="en">Won't start / reinstall firmware</span></td><td><span class="ja">下の「USB での書き込み」</span><span class="en">See "Flashing over USB" below</span></td></tr>
+</tbody></table></div>
+  <h3 class="mh3"><span class="ja">USB での書き込み</span><span class="en">Flashing over USB</span></h3>
+  <p class="ja mp">設定ページが開けないときや、新品の状態から入れ直したいときの方法です。フラッシュを全部消すと、本体の設定・プリセット・スクリプトも消えます。</p><p class="en mp">Use this when the settings page won't open or to reinstall from scratch. Erasing the flash also erases the unit's settings, presets and script.</p>
+  <ol class="ml">
+   <li><span class="ja">上フタを外し、PC と USB-C でつなぎます。</span><span class="en">Remove the top cover and connect the PC by USB-C.</span></li>
+   <li><span class="ja">SW2（BOOT）を押したまま SW1（EN）を押して離し、そのあと SW2 を離します。</span><span class="en">Hold SW2 (BOOT), press and release SW1 (EN), then release SW2.</span></li>
+   <li><span class="ja">Chrome で <a href="https://adafruit.github.io/Adafruit_WebSerial_ESPTool/" target="_blank" rel="noopener">Adafruit WebSerial ESPTool</a> を開き、「Connect」で COM ポートを選びます。</span><span class="en">Open <a href="https://adafruit.github.io/Adafruit_WebSerial_ESPTool/" target="_blank" rel="noopener">Adafruit WebSerial ESPTool</a> in Chrome and choose the COM port with "Connect".</span></li>
+   <li><span class="ja">「Erase」で全部消します。</span><span class="en">Press "Erase" to erase everything.</span></li>
+   <li><span class="ja">1 段目の Offset を 0 にして KISS1_FW.ino.merged.bin を選び、「Program」を押します。</span><span class="en">Set the first Offset to 0, choose KISS1_FW.ino.merged.bin and press "Program".</span></li>
+   <li><span class="ja">終わったら SW1 を押して再起動します。IP は 192.168.10.90 になります。</span><span class="en">When finished, press SW1 to restart. The IP is 192.168.10.90.</span></li>
+  </ol>
+  <p class="ja mp">COM ポートが出てこないときは、別の USB ケーブル（データ通信できるもの）も試してください。</p><p class="en mp">If no COM port appears, try another USB cable (one that carries data).</p>
+ </section>
+ <section class="sec" id="spec">
+  <h2><span class="ja">仕様</span><span class="en">Specifications</span> <span class="sub">SPECS</span></h2>
+  <div class="mt"><table class="mtab"><thead><tr><th><span class="ja">項目</span><span class="en">Item</span></th><th><span class="ja">内容</span><span class="en">Details</span></th></tr></thead><tbody>
+<tr><td><span class="ja">外形</span><span class="en">Size</span></td><td><span class="ja">幅 220 × 高さ 43.6 × 奥行き 114.5 mm（DB25 を含めると約 119.5 mm）、ハーフラック 1U</span><span class="en">220 W × 43.6 H × 114.5 D mm (about 119.5 mm with the DB25), half-rack 1U</span></td></tr>
+<tr><td><span class="ja">ラック</span><span class="en">Rack</span></td><td><span class="ja">2 台を横に連結して 19 インチ 1U（ラック耳は別部品）</span><span class="en">Two units side by side make 19-inch 1U (rack ears are separate parts)</span></td></tr>
+<tr><td><span class="ja">電源</span><span class="en">Power</span></td><td><span class="ja">DC 9〜24V、最大 36W</span><span class="en">DC 9–24 V, 36 W max</span></td></tr>
+<tr><td><span class="ja">+5V 出力</span><span class="en">+5 V out</span></td><td><span class="ja">COM を +5V にしたとき、合計最大 5A</span><span class="en">With COM at +5 V, up to 5 A in total</span></td></tr>
+<tr><td><span class="ja">DB25</span><span class="en">DB25</span></td><td><span class="ja">25 ピン、全ピンを GPI / GPO / GND GPO / COM / GND / SCRIPT に割り当て</span><span class="en">25 pins, each assignable as GPI / GPO / GND GPO / COM / GND / SCRIPT</span></td></tr>
+<tr><td><span class="ja">GPI</span><span class="en">GPI</span></td><td><span class="ja">フォトカプラで受信（COM を絶縁 0V にすれば本体と絶縁）</span><span class="en">Optocoupler input (isolated from the unit with COM on isolated 0 V)</span></td></tr>
+<tr><td><span class="ja">GPO</span><span class="en">GPO</span></td><td><span class="ja">フォト MOS リレーの無電圧接点、または GND へ落とす出力</span><span class="en">PhotoMOS relay voltage-free contact, or an output that pulls to GND</span></td></tr>
+<tr><td><span class="ja">LAN</span><span class="en">LAN</span></td><td><span class="ja">10/100 Mbps、固定 IP または DHCP</span><span class="en">10/100 Mbps, fixed IP or DHCP</span></td></tr>
+<tr><td><span class="ja">タリーの入力元</span><span class="en">Tally sources</span></td><td><span class="ja">TSL 5.0（UDP・TCP）、DB25 接点入力、ATEM、なし（GPI だけ）</span><span class="en">TSL 5.0 (UDP, TCP), DB25 contact inputs, ATEM, none (GPI only)</span></td></tr>
+<tr><td><span class="ja">タリーの送信</span><span class="en">Tally out</span></td><td><span class="ja">TSL 5.0（UDP の 1 台・全体・マルチキャスト、TCP）</span><span class="en">TSL 5.0 (UDP to one unit / broadcast / multicast, TCP)</span></td></tr>
+<tr><td><span class="ja">カメラ台数</span><span class="en">Cameras</span></td><td><span class="ja">1〜40</span><span class="en">1–40</span></td></tr>
+<tr><td><span class="ja">保存</span><span class="en">Storage</span></td><td><span class="ja">本体（設定・プリセット 8 個・スクリプト）、microSD（任意）</span><span class="en">Unit (settings, 8 presets, script), microSD (optional)</span></td></tr>
+<tr><td><span class="ja">設定</span><span class="en">Setup</span></td><td><span class="ja">Web ブラウザ（日本語・英語・スペイン語・中国語・韓国語）</span><span class="en">Web browser (Japanese, English, Spanish, Chinese, Korean)</span></td></tr>
+<tr><td><span class="ja">マイコン</span><span class="en">MCU</span></td><td><span class="ja">ESP32-S3</span><span class="en">ESP32-S3</span></td></tr>
+<tr><td><span class="ja">ファーム</span><span class="en">Firmware</span></td><td><span class="ja">v0.7.7（設定ページ・microSD・USB で更新）</span><span class="en">v0.7.7 (update from the settings page, microSD or USB)</span></td></tr>
+</tbody></table></div>
+  <p class="note ja">未確定：GPO 接点の定格（電圧・電流）と重さは、部品のデータと実測で確かめてから記入します。</p><p class="note en">Still to be confirmed: the GPO contact rating (voltage and current) and the weight will be added once checked against part data and measurements.</p>
+ </section>
+</main>
+
+<footer><span><svg class="bolt" viewBox="0 0 24 32" aria-hidden="true"><path d="M15 0 3 18h8L8 32 21 12h-8l4-12z"/></svg>© 2026 POPKISS</span></footer>
+</body>
+</html>

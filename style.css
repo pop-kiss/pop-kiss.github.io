@@ -131,3 +131,29 @@ table.spec th{width:34%;font:700 12px/1.6 var(--num);letter-spacing:.14em;color:
 .ph2 .photo{margin:0}
 .anno .pic img{filter:none}
 @media(max-width:760px){.cg2,.ph2{grid-template-columns:1fr}}
+/* ---- manual ---- */
+.mtitle{margin:8px 0 6px;font:italic 800 clamp(40px,7vw,72px)/1 var(--num);text-transform:uppercase;transform:skewX(-6deg);transform-origin:left}
+.mtitle span{font:800 clamp(18px,3vw,26px)/1 var(--txt);font-style:normal;margin-left:10px;color:var(--volt)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.toc a{padding:7px 14px;text-decoration:none;color:var(--fg);font-size:13px;background:#000;border:1px solid var(--line2);clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.toc a:hover{background:var(--volt);color:#000;border-color:var(--volt)}
+.mh3{margin:22px 0 8px;font:800 15px/1.4 var(--txt);color:var(--volt)}
+.mp{margin:0 0 10px;max-width:90ch}
+.ml{margin:0 0 12px;padding-left:22px;max-width:90ch}
+.ml li{margin:4px 0}
+.mt{overflow-x:auto;margin:6px 0 14px}
+.mtab{width:100%;border-collapse:collapse;font-size:14px}
+.mtab th{text-align:left;font:700 12px/1.5 var(--txt);color:var(--dim);border-bottom:2px solid var(--line2);padding:8px 10px;white-space:nowrap}
+.mtab td{vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+.mtab td:first-child{white-space:nowrap;font-weight:700}
+.manual a{color:var(--volt)}
+.manual nav a,.manual .mark,.manual .toc a{color:inherit}
+@media(max-width:600px){.mtab td:first-child{white-space:normal}}
+@media print{
+ body{background:#fff!important;color:#000}
+ body:before,.top:after,nav,.lang,footer,.toc,.back{display:none!important}
+ .top{background:#fff;border-bottom:2px solid #000}.mark b{text-shadow:none}.mark .bolt{filter:none}
+ main{clip-path:none;background:#fff;border:0;max-width:none;margin:0;padding:0}
+ .sec:before{background:#000}.mh3{color:#000}.mtab td,.mtab th{border-color:#999;color:#000}.note,.mp,.ml{color:#000}
+ .sec{break-inside:auto}.mtab tr{break-inside:avoid}
+}
