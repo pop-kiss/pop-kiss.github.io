@@ -1,8 +1,8 @@
 KISS-1 Developer Reference (for humans and AI)
 ====================================================================
 POPKISS / https://pop-kiss.github.io/
-Covers: KISS-1 board v0.9.1 (based on official firmware v0.6.5)
-This edition: 2026-11-18
+Covers: KISS-1 board v0.9.1 (based on official firmware v0.7.7)
+This edition: 2026-11-20
 
 This file is for people writing their own firmware for KISS-1, and for
 the AI (ChatGPT, Claude and so on) helping them. When you ask an AI for
@@ -25,12 +25,7 @@ help, paste or attach this whole file first, then say what you want to build.
 - Flashing   : USB-C (native USB of the ESP32-S3)
 - LAN        : W5500 (SPI)
 - I/O        : 5x XL9535 (I2C, PCA9555-compatible registers) at 0x20 to 0x24
-- Display    : 0.96" 128x64 OLED (SSD1306 / SSD1315, I2C, 0x3C, same bus as the expanders),
-               connected by cable to a 4-pin header on the board.
-               The SH1106 found on many 1.3" modules uses a different controller and will not display
-               correctly as is (the image shifts or breaks up). To use one, change the U8g2 declaration to
-               U8G2_SH1106_128X64_NONAME_F_HW_I2C (one line in oled.cpp of the official firmware).
-               When buying a spare, choose one listed as "0.96 inch, SSD1306 (or SSD1315), I2C, 4-pin".
+- Display    : none (the OLED is not fitted)
 - microSD    : SDMMC, 1-bit
 - Status LED : 1x WS2812B
 - Button     : USER (reads LOW when pressed)
@@ -50,7 +45,7 @@ help, paste or attach this whole file first, then say what you want to build.
 --------------------------------------------------------------------
   Function                  GPIO
   ------------------------  ----------------------------------------
-  I2C SDA / SCL             8 / 18      (5x XL9535 + OLED)
+  I2C SDA / SCL             8 / 18      (5x XL9535)
   W5500 SCK / MISO / MOSI   12 / 13 / 11
   W5500 CS / INT / RST      10 / 9 / 14
   microSD CLK / CMD / D0    39 / 38 / 40 (1-bit SDMMC)
@@ -118,7 +113,8 @@ DB25  XL9535  cell  K(photoMOS)  Q(FET)  SENSE(in)
 4. Pin roles (names used by the official firmware)
 --------------------------------------------------------------------
   GPI      input. Reads SENSE. ON while the pin is pulled to ISO0
-  GPO      output. K closes while ON (contact to CBUS; 5 V out when CBUS is +5 V)
+  GPO      output. K closes while ON (contact to CBUS).
+           With CBUS at +5 V it is push-pull: ON = K (5 V out), OFF = Q (pulled to GND)
   COM      K always closed (pin = CBUS)
   GND GPO  Q closes while ON (pin pulled to GND)
   GND      Q always closed (fixed GND)
@@ -127,7 +123,10 @@ Where CBUS goes (the COM reference)
   ISO (isolated 0 V) : K_ISO on
   GND                : K_ISO on, K_IG on
   DRY (nowhere)      : all three off (K_IG on only when there are both GND pins and inputs)
-  +5 V               : B5V on, K_IG on (K_ISO off)
+  +5 V               : B5V on, K_ISO off. K_IG on only when there are GPI pins
+                       (with no GPI, K_IG would push the ~1 mA sense current into the loads on output pins
+                       and LEDs would glow faintly). When COM goes to +5 V, turn the pins assigned to COM
+                       into GND (the official firmware does this)
 
 An input lights when its pin is pulled to ISO0
   (shorted to a COM pin, or to a GND pin while ISO0 is tied to GND)
@@ -165,11 +164,10 @@ Note: also check the contact rating and voltage of the equipment you connect.
 - Flash Size        : 4MB
 - USB CDC On Boot   : Enabled
 - Partition Scheme  : Default 4MB with spiffs
-- Libraries         : U8g2 (OLED). The official firmware also uses ArduinoJson 7
+- Libraries         : none needed for the sample. The official firmware uses ArduinoJson 7
 - LAN works with the ETH library of the esp32 core:
     SPI.begin(12, 13, 11);
     ETH.begin(ETH_PHY_W5500, 1, 10, 9, 14, SPI, 20);
-- OLED: U8g2 U8G2_SSD1306_128X64_NONAME_F_HW_I2C
 - microSD: SD_MMC.setPins(39, 38, 40), then SD_MMC.begin("/sdcard", true)
 - Status LED: rgbLedWrite(48, r, g, b)
 - If uploading fails, put the ESP32-S3 into download mode first
@@ -183,7 +181,7 @@ Flashing your own firmware removes the official features (web settings, tally an
 --------------------------------------------------------------------
 - Makes DB25 pin 25 a COM (isolated 0 V)
 - Shorting pin 1 to pin 25 closes the contact between pin 2 and pin 25
-- Shows the IP address, the input state and the DC input voltage on the OLED
+- Prints the IP address, the input state and the DC input voltage on USB serial (115200) every 2 s; the status LED follows the input
 - Fixed IP 192.168.10.87 (change it on the ETH.config line)
 (Confirmed to compile with esp32 core 3.2.0)
 
@@ -191,16 +189,14 @@ Flashing your own firmware removes the official features (web settings, tally an
 // KISS1_Hello : smallest custom firmware for KISS-1 (board v0.9.1, ESP32-S3)
 //   - DB25 pin 25 = COM (isolated 0 V)
 //   - close a contact between pin 1 and pin 25  ->  pin 2 closes to pin 25 (contact output)
-//   - OLED shows the IP address and the inputs, status LED shows the input
+//   - status LED shows the input, USB serial (115200) prints the IP address, the inputs and the DC input voltage
 // Arduino IDE: board "ESP32S3 Dev Module", Flash 4MB, USB CDC On Boot: Enabled (esp32 core 3.2.0)
-// Library: U8g2
 #include <Wire.h>
 #include <SPI.h>
 #include <ETH.h>
-#include <U8g2lib.h>
 
 namespace PINS {
-  const int SDA = 8, SCL = 18;                                              // XL9535 x5 + OLED
+  const int SDA = 8, SCL = 18;                                              // XL9535 x5
   const int W_SCK = 12, W_MISO = 13, W_MOSI = 11, W_CS = 10, W_INT = 9, W_RST = 14;   // W5500
   const int LED = 48;                                                       // WS2812B
   const int BTN = 47;                                                       // USER button (to GND)
@@ -222,7 +218,6 @@ const uint8_t CELL[5][5] = {
 const uint8_t SENSE_BIT[5] = { 5, 6, 7, 13, 14 };   // bit in (IN1 << 8 | IN0), active low
 enum { R_IN0 = 0x00, R_OUT0 = 0x02, R_POL0 = 0x04, R_CFG0 = 0x06 };
 
-U8G2_SSD1306_128X64_NONAME_F_HW_I2C oled(U8G2_R0, U8X8_PIN_NONE);
 uint8_t outReg[5][2];                                // OUT0 = K (photoMOS to CBUS), OUT1 = Q (FET to GND)
 
 bool wr2(uint8_t a, uint8_t reg, uint8_t v0, uint8_t v1) {
@@ -281,15 +276,12 @@ void setup() {
     Serial.printf("XL9535 0x%02X %s\n", a, ok ? "ok" : "NOT FOUND");
   }
 
-  // 3. OLED (same I2C bus, 0x3C)
-  oled.begin();
-
-  // 4. LAN (W5500), fixed IP
+  // 3. LAN (W5500), fixed IP
   SPI.begin(PINS::W_SCK, PINS::W_MISO, PINS::W_MOSI);
   ETH.begin(ETH_PHY_W5500, 1, PINS::W_CS, PINS::W_INT, PINS::W_RST, SPI, 20);
   ETH.config(IPAddress(192, 168, 10, 87), IPAddress(192, 168, 10, 1), IPAddress(255, 255, 255, 0));
 
-  // 5. COM = isolated 0 V: CBUS -> ISO0, then pin 25 to CBUS
+  // 4. COM = isolated 0 V: CBUS -> ISO0, then pin 25 to CBUS
   digitalWrite(PINS::K_ISO, HIGH);
   setPin(25, 0, true);
 }
@@ -304,18 +296,10 @@ void loop() {
     rgbLedWrite(PINS::LED, pin1 ? 40 : 0, pin1 ? 0 : 20, 0);
     Serial.printf("inputs %07lX\n", (unsigned long)in);
   }
-  if (millis() - lastDraw > 200) {
+  if (millis() - lastDraw > 2000) {                  // every 2 s on USB serial
     lastDraw = millis();
-    char ip[20], vin[20];
-    snprintf(ip, sizeof(ip), "%s", ETH.localIP().toString().c_str());
-    snprintf(vin, sizeof(vin), "DC %.1f V", analogReadMilliVolts(PINS::VSNS) * 11 / 1000.0f);
-    oled.clearBuffer();
-    oled.setFont(u8g2_font_6x12_tf);
-    oled.drawStr(0, 12, "KISS1_Hello");
-    oled.drawStr(0, 28, ip);
-    oled.drawStr(0, 44, pin1 ? "PIN1: ON" : "PIN1: off");
-    oled.drawStr(0, 60, vin);
-    oled.sendBuffer();
+    Serial.printf("IP %s  PIN1 %s  DC %.1f V\n", ETH.localIP().toString().c_str(),
+                  pin1 ? "ON" : "off", analogReadMilliVolts(PINS::VSNS) * 11 / 1000.0f);
   }
   delay(2);
 }

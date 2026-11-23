@@ -6,8 +6,8 @@
 <title>KISS-1 — POPKISS</title>
 <meta name="description" content="KISS-1 — DB25 の全ピンを自由に割り当てられるタリー / GPIO インターフェイス。 / A tally / GPIO interface with fully assignable DB25 pins.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath d='M15 0 3 18h8L8 32 21 12h-8l4-12z' fill='%23ffd60a'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=0.21">
-<script src="site.js?v=0.21"></script>
+<link rel="stylesheet" href="style.css?v=0.23">
+<script src="site.js?v=0.23"></script>
 </head>
 <body>
 <header class="top">
@@ -32,14 +32,7 @@
  </section>
 
  <section class="sec" id="look">
-  <h2><span class="ja">前面と背面</span><span class="en">Front and rear</span> <span class="sub">FRONT / REAR</span></h2>
-  <figure class="photo anno">
-   <div class="pic"><img src="img/kiss-1_cg_front.webp" width="1600" height="318" alt="KISS-1 front" loading="lazy"><span class="mk" style="left:77.29%;top:27.14%">1</span></div>
-   <figcaption><b>FRONT</b></figcaption>
-   <ol class="parts">
-    <li><span class="mk">1</span><div><b><span class="ja">OLED（0.96 インチ）</span><span class="en">OLED (0.96")</span></b><p class="ja">上の段に本体の名前とファームのバージョン、その下に IP アドレスを大きく表示します。エラーがあるときは下の段に 2 つずつ、2 秒ごとに切り替えて表示します（例：NO LAN LINK、CHECK PIN SETUP）。</p><p class="en">The top line shows the unit name and firmware version, with the IP address in large type below. Any errors appear on the bottom lines, two at a time, changing every 2 seconds (for example NO LAN LINK, CHECK PIN SETUP).</p></div></li>
-   </ol>
-  </figure>
+  <h2><span class="ja">背面</span><span class="en">Rear panel</span> <span class="sub">REAR</span></h2>
   <figure class="photo anno">
    <div class="pic"><img src="img/kiss-1_cg_rear.webp" width="1600" height="318" alt="KISS-1 rear" loading="lazy"><span class="mk" style="left:27.20%;top:39.71%">1</span><span class="mk" style="left:57.24%;top:42.57%">2</span><span class="mk" style="left:65.79%;top:59.71%">3</span><span class="mk" style="left:74.02%;top:61.14%">4</span><span class="mk" style="left:82.06%;top:45.43%">5</span></div>
    <figcaption><b>REAR</b></figcaption>
@@ -99,8 +92,8 @@
    </div>
    <div class="feat">
     <h3><small>TALLY SOURCE</small><span class="ja">タリーの入力元</span><span class="en">Tally sources</span></h3>
-    <p class="ja">スイッチャーから直接、TSL 5.0 の受信、DB25 の接点入力から選べます。タリー以外の汎用 GPIO としても使えます。</p>
-    <p class="en">Take tally straight from a switcher, from TSL 5.0 or from DB25 contact inputs. It also works as a general-purpose GPIO box.</p>
+    <p class="ja">スイッチャーから直接、または TSL 5.0 の受信から選べます。DB25 の接点入力は、どの入力元のときも一緒に使えます。タリー以外の汎用 GPIO としても使えます。</p>
+    <p class="en">Take tally straight from a switcher or from TSL 5.0. DB25 contact inputs work alongside whichever source you choose. It also works as a general-purpose GPIO box.</p>
    </div>
    <div class="feat">
     <h3><small>TSL OUT</small><span class="ja">TSL 5.0 で送信</span><span class="en">Send as TSL 5.0</span></h3>
@@ -118,9 +111,9 @@
     <p class="en">Run Arduino-style scripts (setup / loop) right on the unit. Drive pins, override tally, and send or receive UDP, TCP, HTTP, OSC and TSL.</p>
    </div>
    <div class="feat">
-    <h3><small>SETUP</small><span class="ja">設定と表示</span><span class="en">Setup and display</span></h3>
-    <p class="ja">ブラウザの設定ページは日本語・English・Español・中文・한국어に対応。本体の画面には IP アドレスを常に表示し、設定は microSD にも保存できます。<a href="kiss-1-sim.html" style="color:var(--volt)">設定ページのシミュレーター</a>で、ブラウザだけで試せます。</p>
-    <p class="en">The web settings page comes in Japanese, English, Spanish, Chinese and Korean. The unit's display always shows its IP address, and settings can also be saved to microSD. Try it in your browser with the <a href="kiss-1-sim.html" style="color:var(--volt)">settings page simulator</a>.</p>
+    <h3><small>SETUP</small><span class="ja">設定</span><span class="en">Setup</span></h3>
+    <p class="ja">ブラウザの設定ページは日本語・English・Español・中文・한국어に対応。設定は microSD にも保存できます。設定一式をプリセットとして本体・microSD・PC に保存して、読み込み直せます。<a href="kiss-1-sim.html" style="color:var(--volt)">設定ページのシミュレーター</a>で、ブラウザだけで試せます。</p>
+    <p class="en">The web settings page comes in Japanese, English, Spanish, Chinese and Korean. Settings can also be saved to microSD. Whole setups can be saved as presets in the unit, on the microSD or on your PC, and loaded back. Try it in your browser with the <a href="kiss-1-sim.html" style="color:var(--volt)">settings page simulator</a>.</p>
    </div>
    <div class="feat wide">
     <h3><small>CUSTOM FIRMWARE</small><span class="ja">ESP32 に自由に書き込める</span><span class="en">Flash your own firmware to the ESP32</span></h3>
@@ -167,13 +160,10 @@
    <tr><th>Pin current</th><td><span class="ja">GND 出力・GND GPO・GND：約 1 A<br>GPO・COM・+5V 出力：0.3 A（PTC で保護）<br>GPI：約 3 mA</span><span class="en">GND out, GND GPO, GND: about 1 A<br>GPO, COM, +5 V out: 0.3 A (PTC protected)<br>GPI: about 3 mA</span></td></tr>
    <tr><th>Pin voltage</th><td><span class="ja">本体の GND から見て −0.6 V〜+30 V</span><span class="en">−0.6 V to +30 V from the unit's GND</span></td></tr>
    <tr><th>Size</th><td><span class="ja">幅 220 × 高さ 43.6 × 奥行 114.5 mm（DB25 を含め約 119.5 mm）。ハーフラック 1U</span><span class="en">220 W × 43.6 H × 114.5 D mm (about 119.5 mm including the DB25). Half-rack 1U</span></td></tr>
-   <tr><th>Display</th><td><span class="ja">0.96 インチ OLED（SSD1306 / SSD1315・I2C・4 ピン）。IP アドレスを常に表示</span><span class="en">0.96" OLED (SSD1306 / SSD1315, I2C, 4-pin). Always shows the IP address</span></td></tr>
    <tr><th>Storage</th><td><span class="ja">本体と microSD に設定を保存</span><span class="en">Settings saved on the unit and to microSD</span></td></tr>
    <tr><th>Web UI</th><td>日本語 / English / Español / 中文 / 한국어</td></tr>
   </table>
-  <p class="note ja">OLED を買い足すときは「0.96 インチ・SSD1306（または SSD1315）・I2C・4 ピン」と書いてあるものを選んでください。1.3 インチに多い SH1106 は制御チップが違うので、そのままでは映りません（ずれたり乱れたりします）。使うならファームの設定を 1 行変える必要があります。</p>
   <p class="note ja">COM ピンは、つながっている GPO の電流をまとめて流すので、合計が 0.3 A を超えるときは COM を複数のピンに割り当ててください。開発中のため、仕様は変わることがあります。</p>
-  <p class="note en">If you buy a spare OLED, choose one listed as "0.96 inch, SSD1306 (or SSD1315), I2C, 4-pin". The SH1106 found on many 1.3 inch modules uses a different controller and will not display correctly as is (the image shifts or breaks up); using one takes a one-line change in the firmware.</p>
   <p class="note en">A COM pin carries the current of every GPO on it, so if the total goes over 0.3 A, assign COM to more than one pin. KISS-1 is still in development, so specifications may change.</p>
  </section>
 

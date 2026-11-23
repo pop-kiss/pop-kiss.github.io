@@ -1,8 +1,8 @@
 KISS-1 開発リファレンス（人間と AI のための資料）
 ====================================================================
 POPKISS / https://pop-kiss.github.io/
-対象: KISS-1 基板 v0.9.1（公式ファーム v0.6.5 の内容にもとづく）
-この版: 2026-11-18
+対象: KISS-1 基板 v0.9.1（公式ファーム v0.7.7 の内容にもとづく）
+この版: 2026-11-20
 
 このファイルは、KISS-1 で自分のファームウェアを作る人と、それを手伝う
 AI（ChatGPT / Claude など）の両方が読むためのものです。
@@ -26,11 +26,7 @@ AI に開発を頼むときは、このファイルを丸ごと貼り付ける�
 - 書き込み : USB-C（ESP32-S3 の USB）
 - LAN      : W5500（SPI）
 - I/O 拡張 : XL9535 x5（I2C、PCA9555 互換のレジスタ）、アドレス 0x20〜0x24
-- 画面     : 0.96 インチ 128x64 OLED（SSD1306 / SSD1315、I2C、0x3C、I/O 拡張と同じバス）。
-             基板の 4 ピンのヘッダーにケーブルでつなぐ。
-             1.3 インチに多い SH1106 は制御チップが違うので、そのままでは映らない（ずれたり乱れたりする）。
-             使うなら U8g2 の宣言を U8G2_SH1106_128X64_NONAME_F_HW_I2C に変える（公式ファームでは oled.cpp の 1 行）。
-             買い足すときは「0.96 インチ・SSD1306（または SSD1315）・I2C・4 ピン」のものを選ぶ。
+- 画面     : なし（OLED は付けない構成）
 - microSD  : SDMMC 1 ビット
 - 状態 LED : WS2812B x1
 - ボタン   : USER（押すと LOW）
@@ -50,7 +46,7 @@ AI に開発を頼むときは、このファイルを丸ごと貼り付ける�
 --------------------------------------------------------------------
   機能                      GPIO
   ------------------------  ----------------------------------------
-  I2C SDA / SCL             8 / 18      （XL9535 x5 + OLED）
+  I2C SDA / SCL             8 / 18      （XL9535 x5）
   W5500 SCK / MISO / MOSI   12 / 13 / 11
   W5500 CS / INT / RST      10 / 9 / 14
   microSD CLK / CMD / D0    39 / 38 / 40 （1 ビット SDMMC）
@@ -118,7 +114,8 @@ DB25  XL9535  cell  K(photoMOS)  Q(FET)  SENSE(in)
 4. ピンの使い方（公式ファームでの呼び方）
 --------------------------------------------------------------------
   GPI      入力。SENSE を読む。ピンが ISO0 に引かれると ON
-  GPO      出力。ON の間 K を閉じる（CBUS への接点。CBUS が +5V なら 5V 出力）
+  GPO      出力。ON の間 K を閉じる（CBUS への接点）。
+           CBUS が +5V のときはプッシュプル: ON = K（5V を出す）、OFF = Q（GND に落とす）
   COM      K を閉じたまま（ピン = CBUS）
   GND GPO  ON の間 Q を閉じる（ピンを GND に落とす）
   GND      Q を閉じたまま（固定の GND）
@@ -127,7 +124,9 @@ CBUS の行き先（COM の基準）
   ISO（絶縁 0V） : K_ISO = オン
   GND           : K_ISO = オン、K_IG = オン
   DRY（どこにも） : 3 つともオフ（GND ピンと入力があるときだけ K_IG = オン）
-  +5V           : B5V = オン、K_IG = オン（K_ISO はオフ）
+  +5V           : B5V = オン、K_ISO はオフ。K_IG は GPI のピンがあるときだけオン
+                  （GPI がないときに K_IG を入れると、検出用の約 1mA が出力ピンの負荷に流れて LED がうっすら光る）
+                  COM を +5V にするときは、COM に割り当てたピンを GND にする（公式ファームはそうしている）
 
 入力が点灯する条件: そのピンが ISO0 に引かれたとき
   （COM ピンとショートしたとき。または ISO0 が GND につながっていて GND ピンとショートしたとき）
@@ -165,11 +164,10 @@ CBUS の行き先（COM の基準）
 - Flash Size        : 4MB
 - USB CDC On Boot   : Enabled
 - Partition Scheme  : Default 4MB with spiffs
-- ライブラリ        : U8g2（OLED）。公式ファームは ArduinoJson 7 も使用
+- ライブラリ        : サンプルは追加ライブラリ不要。公式ファームは ArduinoJson 7 を使用
 - LAN は esp32 コアの ETH ライブラリで動く:
     SPI.begin(12, 13, 11);
     ETH.begin(ETH_PHY_W5500, 1, 10, 9, 14, SPI, 20);
-- OLED は U8g2 の U8G2_SSD1306_128X64_NONAME_F_HW_I2C
 - microSD は SD_MMC.setPins(39, 38, 40) のあと SD_MMC.begin("/sdcard", true)
 - 状態 LED は rgbLedWrite(48, r, g, b)
 - 書き込めないときは、ESP32-S3 をダウンロードモードにしてから書き込む
@@ -183,7 +181,7 @@ CBUS の行き先（COM の基準）
 --------------------------------------------------------------------
 - DB25 の 25 番を COM（絶縁 0V）にする
 - 1 番と 25 番を接点でショートすると、2 番と 25 番の間の接点が閉じる
-- OLED に IP アドレスと入力の状態、DC 入力電圧を表示する
+- USB シリアル（115200）に IP アドレスと入力の状態、DC 入力電圧を 2 秒ごとに出す。状態 LED は入力に合わせて光る
 - IP アドレスは 192.168.10.87 固定（ETH.config の行で変えられる）
 （esp32 コア 3.2.0 でコンパイルできることを確認済み）
 
@@ -191,16 +189,14 @@ CBUS の行き先（COM の基準）
 // KISS1_Hello : smallest custom firmware for KISS-1 (board v0.9.1, ESP32-S3)
 //   - DB25 pin 25 = COM (isolated 0 V)
 //   - close a contact between pin 1 and pin 25  ->  pin 2 closes to pin 25 (contact output)
-//   - OLED shows the IP address and the inputs, status LED shows the input
+//   - status LED shows the input, USB serial (115200) prints the IP address, the inputs and the DC input voltage
 // Arduino IDE: board "ESP32S3 Dev Module", Flash 4MB, USB CDC On Boot: Enabled (esp32 core 3.2.0)
-// Library: U8g2
 #include <Wire.h>
 #include <SPI.h>
 #include <ETH.h>
-#include <U8g2lib.h>
 
 namespace PINS {
-  const int SDA = 8, SCL = 18;                                              // XL9535 x5 + OLED
+  const int SDA = 8, SCL = 18;                                              // XL9535 x5
   const int W_SCK = 12, W_MISO = 13, W_MOSI = 11, W_CS = 10, W_INT = 9, W_RST = 14;   // W5500
   const int LED = 48;                                                       // WS2812B
   const int BTN = 47;                                                       // USER button (to GND)
@@ -222,7 +218,6 @@ const uint8_t CELL[5][5] = {
 const uint8_t SENSE_BIT[5] = { 5, 6, 7, 13, 14 };   // bit in (IN1 << 8 | IN0), active low
 enum { R_IN0 = 0x00, R_OUT0 = 0x02, R_POL0 = 0x04, R_CFG0 = 0x06 };
 
-U8G2_SSD1306_128X64_NONAME_F_HW_I2C oled(U8G2_R0, U8X8_PIN_NONE);
 uint8_t outReg[5][2];                                // OUT0 = K (photoMOS to CBUS), OUT1 = Q (FET to GND)
 
 bool wr2(uint8_t a, uint8_t reg, uint8_t v0, uint8_t v1) {
@@ -281,15 +276,12 @@ void setup() {
     Serial.printf("XL9535 0x%02X %s\n", a, ok ? "ok" : "NOT FOUND");
   }
 
-  // 3. OLED (same I2C bus, 0x3C)
-  oled.begin();
-
-  // 4. LAN (W5500), fixed IP
+  // 3. LAN (W5500), fixed IP
   SPI.begin(PINS::W_SCK, PINS::W_MISO, PINS::W_MOSI);
   ETH.begin(ETH_PHY_W5500, 1, PINS::W_CS, PINS::W_INT, PINS::W_RST, SPI, 20);
   ETH.config(IPAddress(192, 168, 10, 87), IPAddress(192, 168, 10, 1), IPAddress(255, 255, 255, 0));
 
-  // 5. COM = isolated 0 V: CBUS -> ISO0, then pin 25 to CBUS
+  // 4. COM = isolated 0 V: CBUS -> ISO0, then pin 25 to CBUS
   digitalWrite(PINS::K_ISO, HIGH);
   setPin(25, 0, true);
 }
@@ -304,18 +296,10 @@ void loop() {
     rgbLedWrite(PINS::LED, pin1 ? 40 : 0, pin1 ? 0 : 20, 0);
     Serial.printf("inputs %07lX\n", (unsigned long)in);
   }
-  if (millis() - lastDraw > 200) {
+  if (millis() - lastDraw > 2000) {                  // every 2 s on USB serial
     lastDraw = millis();
-    char ip[20], vin[20];
-    snprintf(ip, sizeof(ip), "%s", ETH.localIP().toString().c_str());
-    snprintf(vin, sizeof(vin), "DC %.1f V", analogReadMilliVolts(PINS::VSNS) * 11 / 1000.0f);
-    oled.clearBuffer();
-    oled.setFont(u8g2_font_6x12_tf);
-    oled.drawStr(0, 12, "KISS1_Hello");
-    oled.drawStr(0, 28, ip);
-    oled.drawStr(0, 44, pin1 ? "PIN1: ON" : "PIN1: off");
-    oled.drawStr(0, 60, vin);
-    oled.sendBuffer();
+    Serial.printf("IP %s  PIN1 %s  DC %.1f V\n", ETH.localIP().toString().c_str(),
+                  pin1 ? "ON" : "off", analogReadMilliVolts(PINS::VSNS) * 11 / 1000.0f);
   }
   delay(2);
 }
