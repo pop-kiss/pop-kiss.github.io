@@ -6,8 +6,8 @@
 <title>KISS-1 — POPKISS</title>
 <meta name="description" content="KISS-1 — DB25 の全ピンを自由に割り当てられるタリー / GPIO インターフェイス。 / A tally / GPIO interface with fully assignable DB25 pins.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath d='M15 0 3 18h8L8 32 21 12h-8l4-12z' fill='%23ffd60a'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=0.23">
-<script src="site.js?v=0.23"></script>
+<link rel="stylesheet" href="style.css?v=0.24">
+<script src="site.js?v=0.24"></script>
 </head>
 <body>
 <header class="top">
@@ -32,9 +32,16 @@
  </section>
 
  <section class="sec" id="look">
-  <h2><span class="ja">背面</span><span class="en">Rear panel</span> <span class="sub">REAR</span></h2>
+  <h2><span class="ja">前面と背面</span><span class="en">Front and rear</span> <span class="sub">FRONT / REAR</span></h2>
   <figure class="photo anno">
-   <div class="pic"><img src="img/kiss-1_cg_rear.webp" width="1600" height="318" alt="KISS-1 rear" loading="lazy"><span class="mk" style="left:27.20%;top:39.71%">1</span><span class="mk" style="left:57.24%;top:42.57%">2</span><span class="mk" style="left:65.79%;top:59.71%">3</span><span class="mk" style="left:74.02%;top:61.14%">4</span><span class="mk" style="left:82.06%;top:45.43%">5</span></div>
+   <div class="pic"><img src="img/kiss-1_cg_front.webp?v=0.36" width="1600" height="317" alt="KISS-1 front" loading="lazy"><span class="mk" style="left:38.18%;top:65.60%">1</span></div>
+   <figcaption><b>FRONT</b></figcaption>
+   <ol class="parts">
+    <li><span class="mk">1</span><div><b><span class="ja">状態 LED の窓（φ3.0）</span><span class="en">Status LED window (3.0 mm)</span></b><p class="ja">本体の状態を表す LED がここから見えます。</p><p class="en">The status LED of the unit shows through here.</p></div></li>
+   </ol>
+  </figure>
+  <figure class="photo anno">
+   <div class="pic"><img src="img/kiss-1_cg_rear.webp" width="1600" height="318" alt="KISS-1 rear" loading="lazy"><span class="mk" style="left:27.20%;top:39.71%">1</span><span class="mk" style="left:57.24%;top:42.57%">2</span><span class="mk" style="left:65.79%;top:59.71%">3</span><span class="mk" style="left:74.02%;top:61.14%">4</span><span class="mk" style="left:82.06%;top:45.43%">5</span><span class="mk" style="left:89.55%;top:42.86%">6</span></div>
    <figcaption><b>REAR</b></figcaption>
    <ol class="parts">
     <li><span class="mk">1</span><div><b><span class="ja">DB25（メス）</span><span class="en">DB25 (female)</span></b><p class="ja">タリー / GPIO の端子です。25 本すべてのピンを、入力・出力・COM・GND・5V に割り当てられます。</p><p class="en">The tally / GPIO connector. All 25 pins can be set as input, output, COM, GND or 5 V.</p></div></li>
@@ -42,6 +49,7 @@
     <li><span class="mk">3</span><div><b><span class="ja">USB-C</span><span class="en">USB-C</span></b><p class="ja">ファームウェアの書き込み用です。</p><p class="en">For flashing firmware.</p></div></li>
     <li><span class="mk">4</span><div><b><span class="ja">microSD</span><span class="en">microSD</span></b><p class="ja">設定を保存できます。カードが入っていれば、起動時にカードの設定を使います。</p><p class="en">Saves the settings. If a card is inserted, the unit uses the settings on the card at power-on.</p></div></li>
     <li><span class="mk">5</span><div><b><span class="ja">DC 入力</span><span class="en">DC in</span></b><p class="ja">9–24 V（最大 36 W）。+5V 出力を使うときは 12 V・3 A 以上の電源を使ってください。</p><p class="en">9–24 V (36 W max). When using the +5 V output, use a supply of 12 V, 3 A or more.</p></div></li>
+    <li><span class="mk">6</span><div><b><span class="ja">ケーブルクランプ用の穴（φ3.3）</span><span class="en">Cable clamp hole (3.3 mm)</span></b><p class="ja">DC ケーブルを固定するクランプを付けるための穴です（オプション）。</p><p class="en">For an optional clamp that holds the DC cable in place.</p></div></li>
    </ol>
   </figure>
  </section>
